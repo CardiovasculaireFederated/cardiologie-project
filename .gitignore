@@ -1,7 +1,3 @@
-data/raw/
-data/incoming/
-data/processed/
-data/server_test/
 venv/
 __pycache__/
 *.parquet
