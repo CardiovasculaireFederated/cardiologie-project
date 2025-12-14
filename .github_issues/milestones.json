@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Phase 1: Infrastructure",
+    "description": "Infrastructure & Environment Setup"
+  },
+  {
+    "title": "Phase 2: Data Pipeline",
+    "description": "Data Engineering (Pipeline de Donnees)"
+  },
+  {
+    "title": "Phase 3: Kafka Core",
+    "description": "Kafka Streaming Core"
+  },
+  {
+    "title": "Phase 4: AI Logic",
+    "description": "AI & Federated Logic"
+  },
+  {
+    "title": "Phase 5: Containerization",
+    "description": "Containerization & Orchestration"
+  },
+  {
+    "title": "Phase 6: Monitoring",
+    "description": "Monitoring & Visualization"
+  }
+]

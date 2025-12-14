@@ -1,0 +1,16 @@
+{
+  "Infrastructure": "1f50e8",
+  "Data-Engineering": "0052cc",
+  "Kafka-Streaming": "fbca04",
+  "AI-Federated": "d4c5f9",
+  "Containerization": "cccccc",
+  "Monitoring": "ff6b6b",
+  "P1-DevOps": "e11d21",
+  "P2-Data": "0e8a16",
+  "P3-AI-Client": "c2e0c6",
+  "P4-Server": "fef2c0",
+  "To-Do": "cccccc",
+  "In-Progress": "fbca04",
+  "Done": "0e8a16",
+  "Blocked": "d73a49"
+}
