@@ -1,3 +1,22 @@
-# docker-compose.yml
-# Projet : Cardio Federated Learning
-# TODO: Implémentation à venir
+version: "3.8"
+
+services:
+  kafka:
+    extends:
+      file: infrastructure/kafka-compose.yml
+      service: kafka
+
+  zookeeper:
+    extends:
+      file: infrastructure/kafka-compose.yml
+      service: zookeeper
+
+  server:
+    build: ./server
+    depends_on:
+      - kafka
+
+  client:
+    build: ./client
+    depends_on:
+      - kafka

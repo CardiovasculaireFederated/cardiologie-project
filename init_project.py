@@ -69,6 +69,7 @@ FILES = {
         "README.md",
         ".gitignore",
     ],
+    
 }
 
 def create_project():
