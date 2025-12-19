@@ -2,3 +2,13 @@ venv/
 __pycache__/
 *.parquet
 .DS_Store
+check_install.py
+README.md
+setup_spark_env.py
+test_spark_fixed.py
+test_spark.py
+TROUBLESHOOTING_WINDOWS.md
+README.md
+test_simple.py
+SPRINT1_COMPLETED.md
+README.md
