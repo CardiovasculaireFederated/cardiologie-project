@@ -1,3 +1,6 @@
+# README.md
+# Projet : Cardio Federated Learning
+# TODO: Implémentation à venir
 # Projet Cardio Federated Learning
 
 Projet d'apprentissage fédéré pour la prédiction des maladies cardiovasculaires utilisant Apache Spark et Flower Framework.
@@ -174,9 +177,7 @@ python test_spark.py
 
 **Résultat attendu** :
 ```
-============================================================
   TESTS DE CONFIGURATION SPARK - PROJET CARDIO ML
-============================================================
 
 TEST 1 : Création de la session Spark
 Session Spark créée avec succès!
@@ -195,9 +196,7 @@ Colonnes identifiées avec succès!
    - Nombre de features : 20
    - Colonne cible : Heart Disease Status
 
-============================================================
   TOUS LES TESTS SONT PASSÉS AVEC SUCCÈS!
-============================================================
 ```
 
 ---
