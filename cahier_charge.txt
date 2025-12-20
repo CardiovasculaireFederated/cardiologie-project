@@ -1,1 +1,1351 @@
+# CAHIER DE CHARGES
 
+## Federated Learning with Apache Kafka
+
+---
+
+## 1. PRESENTATION DU PROJET
+
+### 1.1 Objectif Principal
+Développer une infrastructure de machine learning fédéré complète intégrant Apache Kafka pour la communication distribuée entre clients et serveur central, permettant l'entraînement décentralisé de modèles de deep learning sur des données hétérogènes.
+
+### 1.2 Contexte et Justification
+Ce projet répond aux besoins croissants de privacy-preserving machine learning dans les contextes sensibles (données médicales, financières). L'architecture permet l'entraînement de modèles globaux sans centraliser les données, tout en garantissant une communication fiable et scalable via Kafka.
+
+### 1.3 Périmètre
+- Infrastructure Kafka complète avec Docker
+- Serveur Flower implémentant FedAvg
+- 2 clients simulant des hôpitaux avec données différentes
+- Système de monitoring complet (Prometheus/Grafana)
+- Documentation technique complète
+
+### 1.4 Exclusions
+- Implémentation de mécanismes de privacy différentielle avancés
+- Déploiement en production cloud
+- Support multi-language (Python uniquement)
+- Scalability au-delà de 4 clients simulés
+- Optimisations de compression de modèles
+
+---
+
+## 2. ORGANISATION DU PROJET
+
+### 2.1 Durée Totale
+10 jours calendaires
+
+### 2.2 Équipe
+4 personnes
+- Personne 1: Infrastructure Kafka + Data Pipeline
+- Personne 2: Flower Server + Agrégation
+- Personne 3: Clients Federated + Entraînement
+- Personne 4: Monitoring + Dashboard
+
+### 2.3 Horaires et Disponibilité
+A définir par l'équipe (recommandé: temps plein ou équivalent 35h/semaine minimum par personne)
+
+### 2.4 Lieu de Travail
+Flexible (préféré: colocalisé ou communication synchrone quotidienne)
+
+---
+
+## 3. DESCRIPTION TECHNIQUE DES TACHES
+
+### 3.1 PERSONNE 1: Infrastructure Kafka + Data Pipeline
+
+#### Tache 1.1: Docker Compose pour Kafka
+**Description:** Configurer une infrastructure Kafka complète avec Zookeeper via Docker Compose.
+
+**Livraables:**
+- docker-compose.yml avec services Zookeeper et Kafka Broker
+- Configuration environment variables
+- Documentation deployment
+
+**Criteres de Succes:**
+- docker-compose up démarre sans erreurs
+- Kafka broker accessible sur port 9092
+- Zookeeper responsive sur port 2181
+- Logs propres sans warnings critiques
+
+**Duree Estimee:** Days 1-2
+
+**Sous-taches:**
+1. Créer Dockerfile pour Zookeeper
+2. Créer Dockerfile pour Kafka Broker
+3. Configurer volumes persistants pour data
+4. Exposer et mapper les ports réseau
+5. Tester la démarrage des services
+
+---
+
+#### Tache 1.2: Creation des Topics Kafka
+**Description:** Créer et configurer 4 topics Kafka pour la communication dans le système fédéré.
+
+**Livraables:**
+- Scripts de création des topics
+- Configuration de partitioning et replication
+
+**Topics a Creer:**
+1. model_updates: Envoi des poids des clients au serveur
+2. global_model: Distribution du modèle global aux clients
+3. client_weights: Archive des poids par round
+4. metrics_events: Événements et métriques d'entraînement
+
+**Configuration:**
+- Partitions: 2-3 par topic
+- Replication Factor: 1 (développement)
+- Retention: Illimité
+
+**Criteres de Succes:**
+- 4 topics créés et visibles via Kafka CLI
+- Partitioning correct
+- Topics accessibles pour production et consommation
+
+**Duree Estimee:** Days 2-3
+
+**Sous-taches:**
+1. Créer script kafka-topics.sh
+2. Créer chaque topic avec paramètres
+3. Valider création via CLI
+4. Documenter configuration
+
+---
+
+#### Tache 1.3: Producer/Consumer Implementation
+**Description:** Développer les composants Python pour production et consommation de messages Kafka.
+
+**Livraables:**
+- kafka_producer.py: Classe réutilisable pour envoi de messages
+- kafka_consumer.py: Classe réutilisable pour consommation
+- kafka_base.py: Classes abstraites et utilitaires
+
+**Specifications:**
+
+**Producer Requirements:**
+- Connexion aux brokers Kafka configurables
+- Retry logic avec exponential backoff
+- Gestion des erreurs (ConnectionError, TimeoutError)
+- Logging détaillé des operations
+- Support compression (snappy/lz4)
+- Acknowledge mode: all
+
+**Consumer Requirements:**
+- Subscription à topics multiples
+- Gestion des offsets (auto-commit configurable)
+- Consumer group management
+- Error recovery
+- Graceful shutdown
+- Timeout configurable
+
+**Performance Requirements:**
+- Latency < 500ms pour messages < 10MB
+- Throughput > 1000 messages/sec
+- Memory footprint minimal
+
+**Criteres de Succes:**
+- Producer envoie 100 messages sans perte
+- Consumer lit messages en ordre
+- Latency mesurée < 500ms
+- Tests unitaires > 90% pass rate
+
+**Duree Estimee:** Days 3-5
+
+**Sous-taches:**
+1. Implémenter KafkaProducer base class
+2. Implémenter KafkaConsumer base class
+3. Configuration management
+4. Error handling et retries
+5. Unit tests
+6. Integration tests avec Kafka running
+
+---
+
+#### Tache 1.4: Model Serialization Module
+**Description:** Développer un module de sérialisation pour les modèles PyTorch et TensorFlow.
+
+**Livraables:**
+- model_serializer.py: Module central de sérialisation
+
+**Requirements:**
+
+**Sérialisation:**
+- Support PyTorch: state_dict, full model
+- Support TensorFlow: SavedModel format, weights only
+- Format de sortie: bytes (pickle ou protobuf)
+- Compression optionnelle
+
+**Désérialisation:**
+- Reconstruct exact model state
+- Préservation dtype et shape
+- Validation de l'intégrité
+
+**Performance:**
+- Taille sérialisée < 10MB pour petit modèle CNN
+- Temps serialization < 1s pour 1M paramètres
+- Temps deserialization < 1s
+
+**Criteres de Succes:**
+- PyTorch model roundtrip (serialize/deserialize) OK
+- TensorFlow model roundtrip OK
+- Tensors préservent shape, dtype, valeurs
+- Tests avec models réels
+
+**Duree Estimee:** Days 4-6
+
+**Sous-taches:**
+1. Design architecture sérialisation
+2. Implémenter PyTorch serializer
+3. Implémenter TensorFlow serializer
+4. Compression integration
+5. Validation tests
+6. Benchmark performance
+
+---
+
+#### Tache 1.5: Testing et Documentation
+**Description:** Créer tests integration et documentation complète de l'infrastructure Kafka.
+
+**Livraables:**
+- test_kafka_integration.py: Tests integration complets
+- README_KAFKA.md: Documentation technique
+- Architecture diagram (ASCII ou image)
+
+**Documentation Requirements:**
+- Setup instructions détaillées
+- Configuration parameters
+- Message schemas (JSON)
+- Troubleshooting guide
+- Performance tuning recommendations
+
+**Test Coverage:**
+- Test Producer -> Broker -> Consumer
+- Test multiple consumers (group)
+- Test topic partitioning
+- Test offset management
+- Test error scenarios
+- Test with serialized models
+
+**Criteres de Succes:**
+- 95%+ test pass rate
+- Documentation complète et claire
+- New user peut setup en < 30 minutes
+- All edge cases documentés
+
+**Duree Estimee:** Days 6-10
+
+**Sous-taches:**
+1. Écrire tests integration
+2. Écrire tests performance
+3. Écrire tests error handling
+4. Rédiger README
+5. Créer architecture diagram
+6. Créer troubleshooting section
+
+---
+
+### 3.2 PERSONNE 2: Flower Server + Agrégation
+
+#### Tache 2.1: Flower Server Architecture
+**Description:** Implémenter l'architecture de base du serveur Flower pour orchestrer l'entraînement fédéré.
+
+**Livraables:**
+- flower_server.py: Serveur principal
+- model.py: Définition du modèle global
+- config.py: Paramètres configuration
+
+**Requirements:**
+
+**Flower Server:**
+- Classe héritant de fl.server.Server
+- Méthodes: setup(), start(), cleanup()
+- Support multiple clients (minimum 2)
+- Round-based training orchestration
+- Timeout management
+
+**Global Model:**
+- Architecture CNN simple (ex: MNIST-compatible)
+- Support PyTorch et TensorFlow
+- Initialisation random seed fixe (reproducibilité)
+- Parameter count: 1M-5M (petit modèle)
+
+**Configuration:**
+- Port server: 8080
+- Number of rounds: 3-5
+- Clients per round: 2
+- Epochs per client: 1-3
+
+**Criteres de Succes:**
+- Serveur démarre sans erreurs
+- Écoute sur port 8080
+- Accepte connections de clients
+- Modèle peut être initialisé et sauvegardé
+
+**Duree Estimee:** Days 1-3
+
+**Sous-taches:**
+1. Design architecture FederatedServer
+2. Implement base server class
+3. Initialize global model
+4. Setup configuration management
+5. Implement startup/shutdown logic
+6. Create initial tests
+
+---
+
+#### Tache 2.2: FedAvg Strategy Implementation
+**Description:** Implémenter l'algorithme FedAvg (Federated Averaging) pour l'agrégation des modèles.
+
+**Livraables:**
+- strategies.py: Stratégies de fédération personnalisées
+
+**Requirements:**
+
+**FedAvg Algorithm:**
+- aggregate_fit(): Agrégation des poids après training
+- aggregate_evaluate(): Évaluation du modèle global
+- configure_fit(): Configuration pour les clients
+- Support weighted averaging par nombre de samples
+
+**Specifics:**
+- Pondération: proportionnelle au nombre de samples
+- Convergence sur données simulées en 3-5 rounds
+- Handling de clients dropped (optionnel)
+
+**Criteres de Succes:**
+- FedAvg calcule moyenne pondérée correctement
+- Unit tests > 98% pass
+- Convergence observable sur données synthétiques
+- Pas de NaN/Inf dans les poids agrégés
+
+**Duree Estimee:** Days 2-4
+
+**Sous-taches:**
+1. Study FedAvg paper/algorithm
+2. Design aggregation pipeline
+3. Implement aggregate_fit()
+4. Implement aggregate_evaluate()
+5. Implement configure_fit()
+6. Unit tests for each method
+7. Integration test with mock clients
+
+---
+
+#### Tache 2.3: Kafka Consumer Integration (Server-side)
+**Description:** Intégrer un consumer Kafka pour recevoir les poids des clients.
+
+**Livraables:**
+- kafka_consumer_server.py: Consumer pour model_updates topic
+
+**Requirements:**
+- Subscribe à topic "model_updates"
+- Désérialiser poids reçus (utiliser model_serializer.py de P1)
+- Valider intégrité des poids
+- Store poids temporairement en mémoire
+- Attendre N clients avant agrégation
+- Timeout handling: 30s par client
+
+**Synchronisation avec Flower:**
+- Lire depuis Kafka dans la stratégie FedAvg
+- Trigger agrégation quand tous clients received
+- Non-blocking I/O
+
+**Criteres de Succes:**
+- Reçoit poids de 2 clients
+- Pas de perte de données
+- Timeout correctement géré
+- Latency mesurable
+
+**Duree Estimee:** Days 4-6
+
+**Sous-taches:**
+1. Create KafkaConsumer for model_updates
+2. Implement deserialization
+3. Implement weight validation
+4. Implement aggregation trigger logic
+5. Handle client timeouts
+6. Integration with FedAvg strategy
+7. Test with live data
+
+---
+
+#### Tache 4.5: Clients Comparison Dashboard
+**Description:** Créer un dashboard comparant les métriques des deux clients (Hospital 1 vs Hospital 2).
+
+**Livraables:**
+- dashboard_clients.json: Fichier dashboard JSON
+
+**Dashboard Panels:**
+
+**Panel 1: Loss Comparison (Superposed Timeseries)**
+- Query: local_model_loss{client_id="hospital1"} vs local_model_loss{client_id="hospital2"}
+- Type: Line chart
+- Two lines: one per hospital
+- Legend: show client_id
+- Color: different colors per client
+
+**Panel 2: Accuracy Comparison (Superposed Timeseries)**
+- Query: local_model_accuracy{client_id="hospital1"} vs local_model_accuracy{client_id="hospital2"}
+- Type: Line chart
+- Two lines: one per hospital
+- Y-axis: 0-1 range
+- Legend: client names
+
+**Panel 3: Local Epochs per Client (Bar chart)**
+- Query: local_epochs_completed per client_id
+- Type: Bar chart
+- X-axis: client_id
+- Y-axis: epoch count
+
+**Panel 4: Data Distribution (Pie chart)**
+- Query: local_data_size per client_id
+- Type: Pie chart
+- Show: proportion of data between hospitals
+
+**Selector Variable (Optional):**
+- Let user select client_id to drill down
+
+**Criteres de Succes:**
+- Clear comparison between Hospital 1 and 2
+- Convergence differences visible
+- Data labels explicit and readable
+- Professional styling
+
+**Duree Estimee:** Days 6-8
+
+**Sous-taches:**
+1. Create loss comparison panel
+2. Create accuracy comparison panel
+3. Create epochs bar chart
+4. Create data distribution pie
+5. Apply consistent styling
+6. Test with actual metrics
+7. Verify all labels clear
+
+---
+
+#### Tache 4.6: Communication Metrics Dashboard
+**Description:** Créer un dashboard pour monitorer la communication Kafka (latence, débit, erreurs).
+
+**Livraables:**
+- dashboard_kafka.json: Fichier dashboard JSON
+
+**Dashboard Panels:**
+
+**Panel 1: Messages per Second (Timeseries)**
+- Query: rate(kafka_messages_sent_total[1m]) per topic
+- Type: Line chart
+- One line per topic
+- Y-axis: messages/sec
+- Legend: topic names
+
+**Panel 2: Latency Histogram (Heatmap or Histogram)**
+- Query: kafka_latency_ms per topic
+- Type: Heatmap or Histogram
+- Show: distribution of latencies
+- Color: intensity based on frequency
+
+**Panel 3: Message Size Distribution (Bar chart)**
+- Query: histogram_quantile(0.95, kafka_message_size)
+- Type: Bar chart (p50, p95, p99 latencies)
+- Show: quantiles of message sizes
+
+**Panel 4: Error Rate (Gauge or Counter)**
+- Query: kafka_errors_total
+- Type: Gauge showing current error count
+- Color: red if > 0
+
+**Alerting Rules (Optional):**
+- Alert if latency > 1000ms
+- Alert if error_rate > 0%
+- Alert if messages_per_sec < expected_throughput
+
+**Criteres de Succes:**
+- Latency < 1000ms observable
+- No spikes > 2000ms
+- Error rate = 0%
+- Clear trend visualization
+- Professional appearance
+
+**Duree Estimee:** Days 7-9
+
+**Sous-taches:**
+1. Create throughput panel
+2. Create latency heatmap
+3. Create message size panel
+4. Create error gauge
+5. Add alert thresholds
+6. Test with live Kafka traffic
+7. Verify metrics accuracy
+
+---
+
+#### Tache 4.7: Monitoring Documentation
+**Description:** Rédiger la documentation complète pour setup et utilisation du monitoring.
+
+**Livraables:**
+- README_MONITORING.md: Documentation technique
+- Query examples file (optionnel)
+
+**Documentation Contents:**
+
+**1. Setup Instructions:**
+- Prerequisites (Docker, docker-compose)
+- Installation steps
+- Configuration details
+- Troubleshooting common issues
+
+**2. Metrics Reference:**
+- List all metrics with descriptions
+- Type (Counter, Gauge, Histogram)
+- Labels
+- Unit
+- Update frequency
+
+**3. Prometheus Queries:**
+- Basic queries examples
+- Aggregation queries
+- Rate/increase functions
+- Examples for each metric
+
+**4. Dashboard Usage:**
+- How to access Grafana (port 3000)
+- Default credentials
+- How to navigate dashboards
+- How to refresh data
+- How to zoom/drill-down
+
+**5. Troubleshooting Guide:**
+- Common issues and solutions
+- Missing metrics debugging
+- Prometheus not scraping
+- Grafana connection issues
+- Performance problems
+
+**6. Alerting Setup (if applicable):**
+- How to create custom alerts
+- Alert rule syntax
+- Testing alerts
+- Alert notification channels
+
+**Criteres de Succes:**
+- New team member can setup monitoring in 15 minutes
+- All metrics documented with units
+- All dashboards explained
+- All common issues covered
+- Clear and professional writing
+
+**Duree Estimee:** Days 9-10
+
+**Sous-taches:**
+1. Write setup instructions
+2. Document all metrics
+3. Provide Prometheus query examples
+4. Document dashboard navigation
+5. Create troubleshooting section
+6. Add alerting documentation
+7. Add appendix with screenshots
+
+---
+
+## 4. DELIVERABLES GLOBAUX
+
+### 4.1 Code et Configurations
+- docker-compose.yml (Infrastructure Kafka)
+- flower_server.py et dépendances
+- client_hospital_1.py et client_hospital_2.py
+- data_loader.py et training.py
+- metrics_exporter.py
+- prometheus.yml et Dockerfile.prometheus
+- docker-compose.monitoring.yml
+
+### 4.2 Documentation
+- README_KAFKA.md
+- README_FLOWER.md
+- README_CLIENTS.md
+- README_MONITORING.md
+- Architecture documentation
+- API documentation
+
+### 4.3 Tests
+- test_kafka_integration.py
+- test_aggregation.py
+- test_e2e_fedavg.py
+- test_clients_execution.py
+
+### 4.4 Dashboards Grafana
+- dashboard_overview.json
+- dashboard_clients.json
+- dashboard_kafka.json
+
+### 4.5 Données et Configuration
+- prometheus.yml
+- grafana datasource config
+- project_data.json
+- notion_import.csv (si applicable)
+
+---
+
+## 5. CRITERES DE VALIDATION
+
+### 5.1 Fonctionnalité
+- Kafka démarre et crée topics correctement
+- 2 clients se connectent au serveur Flower
+- 5 rounds fédérés complétés avec convergence observable
+- Modèle global s'améliore à chaque round
+- Aucune perte de données dans Kafka
+
+### 5.2 Performance
+- Latence Kafka < 500ms
+- Training per epoch < 30s
+- Temps par round < 2 minutes
+- Monitoring ne dégrade pas performance (< 5% overhead)
+
+### 5.3 Qualité du Code
+- Code documenté (docstrings)
+- Tests unitaires > 90% pass rate
+- Pas d'erreurs critiques en logs
+- PEP 8 compliant (Python)
+
+### 5.4 Documentation
+- Tous les modules documentés
+- Setup instructions complètes
+- API documentation présente
+- Troubleshooting guide inclusif
+
+### 5.5 Monitoring
+- Tous les dashboards affichent données
+- Métriques collectées correctement
+- 5s refresh rate fonctionnel
+- Historique persistant > 1 jour
+
+---
+
+## 6. DEPENDANCES ET RISQUES
+
+### 6.1 Dépendances Critiques Entre Taches
+- P1 (Kafka setup) doit finir avant P2/P3/P4 (Days 1-3)
+- P2 (Flower Server) et P3 (Clients) parallèles mais interdépendantes
+- P4 (Monitoring) peut commencer en parallèle mais a besoin de metrics exports
+- P3-P6 (Testing multi-client) dépend de P1-P5 complètes
+
+### 6.2 Risques Identifiés
+1. Complexité Kafka: Mitigation = documentation clear + design simple
+2. Synchronisation distribuée: Mitigation = timeouts généreux, retry logic
+3. Data heterogeneity: Mitigation = datasets prédéfinis et splits fixes
+4. Performance bottlenecks: Mitigation = benchmarking early, optimization iterative
+
+### 6.3 Buffer Temps
+- Days 8-10 reserved for testing, debugging, documentation finalization
+- Slack time: ~20% du total (2 days) pour contingencies
+
+---
+
+## 7. RESSOURCES REQUISES
+
+### 7.1 Matériel
+- Machine(s) avec minimum 8GB RAM, 4 cores CPU
+- Connexion réseau fiable (localhost ou LAN)
+- Disque dur: 50GB libre (pour Docker images, datasets)
+
+### 7.2 Logiciels
+- Python 3.9+
+- Docker et Docker Compose
+- Git
+- IDE/Text editor
+
+### 7.3 Bibliothèques Python (à installer)
+- flower (federated learning framework)
+- kafka-python (Kafka client)
+- torch ou tensorflow (ML frameworks)
+- prometheus-client (metrics)
+- numpy, pandas (data processing)
+- matplotlib, plotly (visualization optionnel)
+
+### 7.4 Services Externes
+- Aucun service cloud requis (tout local)
+- PyPI pour pip packages
+
+---
+
+## 8. COMMUNICATION ET REPORTING
+
+### 8.1 Réunions
+- Daily standup: 15 min (status, blockers)
+- Bi-daily technical sync: 30 min (integration, issues)
+- End-of-day demo: 30 min (progress review)
+
+### 8.2 Documentation du Progrès
+- JIRA/Notion board mise à jour daily
+- GitHub commits avec messages clairs
+- Log errors et solutions dans wiki
+
+### 8.3 Escalation Path
+1. Technical blocker: discuss in next daily sync
+2. Critical issue: immediate communication
+3. Scope change: requires team consensus
+
+---
+
+## 9. DEFINITION DU SUCCES (Jour 10)
+
+### Critera d'Acceptation Final
+- [ ] docker-compose up lance tout sans erreurs
+- [ ] 2 clients se connectent à Flower Server
+- [ ] 5 federated rounds exécutés
+- [ ] Global accuracy augmente (observable sur graphique)
+- [ ] Grafana dashboards affichent métriques live
+- [ ] 0 erreurs critiques dans logs
+- [ ] Toute documentation complète
+- [ ] Code commits dans repository
+- [ ] Démonstration live fonctionnelle
+
+### Deliverables Requis
+- Code source complet (GitHub)
+- Documentation (markdown files)
+- Tests passants
+- Configuration files (docker, prometheus, grafana)
+- Dashboards JSON exportés
+
+---
+
+## 10. NOTES IMPORTANTES
+
+- Pas d'emoji dans documentation formelle
+- Tous les concepts expliqués sans jargon excessif
+- Priorité: Fonctionnalité > Performance > Optimization
+- Documentation doit être claire pour nouveau contributeur
+- Testing important: minimum 3-5 rounds à tester
+- Monitoring non-optionnel: fait partie de la validations with mock producer
+
+---
+
+#### Tache 2.4: Kafka Producer Integration (Server-side)
+**Description:** Intégrer un producer Kafka pour distribuer le modèle global aux clients.
+
+**Livraables:**
+- kafka_producer_server.py: Producer pour global_model topic
+
+**Requirements:**
+- Publish à topic "global_model" après agrégation
+- Sérialiser modèle global (utiliser model_serializer.py)
+- Archive des poids dans "client_weights" par round
+- Envoi des métriques dans "metrics_events"
+- Version control des modèles (round_id)
+
+**Publishing:**
+- Après chaque round complété
+- Format: serialized_model + metadata (round_id, timestamp)
+- Latency target: < 2s pour model size 10MB
+
+**Archiving:**
+- Store poids de chaque client et agrégé
+- Structure: {round_id: {client_id: weights, global: weights}}
+
+**Criteres de Succes:**
+- Modèle global publié après agrégation
+- Clients reçoivent model < 2s
+- Archive complète et accessible
+- Métadata correctement taggée
+
+**Duree Estimee:** Days 5-7
+
+**Sous-taches:**
+1. Create KafkaProducer for global_model
+2. Implement model serialization
+3. Create archiving mechanism
+4. Implement metrics publishing
+5. Add round versioning
+6. Integration with aggregation
+7. Tests with mock consumer
+
+---
+
+#### Tache 2.5: Aggregation Module
+**Description:** Développer un module dédié pour l'agrégation des poids selon FedAvg.
+
+**Livraables:**
+- aggregation.py: Fonctions d'agrégation
+
+**Functions:**
+- aggregate_weights(client_weights: List[Tensor], num_samples: List[int]) -> Tensor
+  - Calcule: sum(w_i * n_i) / sum(n_i)
+  - Support batch aggregation
+  - Numerical stability (no overflow)
+
+**Requirements:**
+- Support PyTorch tensors
+- Support TensorFlow tensors
+- Parallel aggregation si possible
+- Error handling pour NaN/Inf
+
+**Criteres de Succes:**
+- Unit tests > 98% pass
+- Convergence en 3-5 rounds sur MNIST
+- Numerical stability verified
+- Performance acceptable (< 100ms pour 1M params)
+
+**Duree Estimee:** Days 5-7
+
+**Sous-taches:**
+1. Design aggregation architecture
+2. Implement weighted average function
+3. Add numerical stability checks
+4. Implement batch processing
+5. Unit tests avec données synthétiques
+6. Integration test with FedAvg
+7. Performance benchmarking
+
+---
+
+#### Tache 2.6: Testing et Containerization
+**Description:** Tests complets et package Docker du serveur Flower.
+
+**Livraables:**
+- test_aggregation.py: Tests d'agrégation
+- test_e2e_fedavg.py: Tests end-to-end
+- Dockerfile: Image Docker du serveur
+- README_FLOWER.md: Documentation
+
+**Testing:**
+- Unit tests pour FedAvg
+- Unit tests pour agrégation
+- Integration tests avec mock clients
+- E2E tests avec vraies données
+- 5 rounds de fédération complets
+
+**Docker Requirements:**
+- Base image: python:3.10-slim
+- Install dependencies (flower, torch/tf, kafka-python)
+- Expose port 8080
+- Health check endpoint
+- Image size < 2GB
+
+**Criteres de Succes:**
+- 5+ rounds fédérés complétés sans erreur
+- Docker image démarre et accepte clients
+- All tests pass
+- Documentation complète et claire
+
+**Duree Estimee:** Days 8-10
+
+**Sous-taches:**
+1. Write comprehensive unit tests
+2. Write integration tests
+3. Write E2E tests
+4. Create Dockerfile
+5. Build and test Docker image
+6. Write README
+7. Document API endpoints
+
+---
+
+### 3.3 PERSONNE 3: Federated Clients + Entraînement
+
+#### Tache 3.1: Data Loader Implementation
+**Description:** Implémenter le chargement et préparation des datasets pour les 2 clients.
+
+**Livraables:**
+- data_loader.py: Module de chargement des données
+
+**Requirements:**
+
+**Dataset Selection:**
+- MNIST ou CIFAR-10 ou Fashion-MNIST
+- Hospital 1: Split 1 (ex: digits 0-4 pour MNIST)
+- Hospital 2: Split 2 (ex: digits 5-9 pour MNIST)
+
+**Data Preparation:**
+- Download automatique (torchvision ou TensorFlow datasets)
+- Normalisation (mean/std)
+- Preprocessing (reshape, augmentation optionnelle)
+- Train/validation split: 70/30
+- Batch creation: batch_size=32
+
+**Functions:**
+- load_hospital_1_data() -> (train_loader, val_loader, test_loader)
+- load_hospital_2_data() -> (train_loader, val_loader, test_loader)
+- Caching local pour éviter re-downloads
+
+**Criteres de Succes:**
+- 2 datasets chargés correctement
+- Data shapes correctes (B, C, H, W)
+- Pas de data leakage entre train/val
+- Balanced classes par hospital
+
+**Duree Estimee:** Days 1-3
+
+**Sous-taches:**
+1. Choose dataset et split strategy
+2. Implement download logic
+3. Implement preprocessing pipeline
+4. Implement data loaders
+5. Verify data integrity
+6. Test with different batch sizes
+7. Add caching mechanism
+
+---
+
+#### Tache 3.2: Client 1 Architecture
+**Description:** Implémenter le premier client Flower pour Hospital 1.
+
+**Livraables:**
+- client_hospital_1.py: Client principal
+
+**Requirements:**
+
+**Client Implementation:**
+- Classe héritant de fl.client.NumPyClient
+- Methods:
+  - get_parameters() -> weights
+  - fit(parameters, config) -> updated_weights
+  - evaluate(parameters, config) -> metrics
+
+**Configuration:**
+- Model: Same architecture as global model
+- Optimizer: SGD or Adam
+- Learning rate: 0.01
+- Local epochs per round: 1-3
+
+**Local Training:**
+- Standard supervised learning loop
+- Loss: CrossEntropyLoss
+- Metrics: accuracy, loss
+- Return: weights, num_samples, metrics
+
+**Criteres de Succes:**
+- Client se connecte au serveur
+- 1 epoch complété en < 30s
+- Poids retournés correct format
+- Métriques reportées correctement
+
+**Duree Estimee:** Days 2-4
+
+**Sous-taches:**
+1. Design client architecture
+2. Implement NumPyClient subclass
+3. Implement get_parameters()
+4. Implement fit() method
+5. Implement evaluate() method
+6. Test local training loop
+7. Integration test with server
+
+---
+
+#### Tache 3.3: Client 2 Architecture
+**Description:** Implémenter le deuxième client Flower pour Hospital 2.
+
+**Livraables:**
+- client_hospital_2.py: Client 2 (réutilise code de Client 1)
+
+**Requirements:**
+- Same architecture as Client 1
+- Different dataset (Hospital 2 data)
+- Same model, optimizer parameters
+- Runs independently
+
+**Specifics:**
+- Can run simultaneously with Client 1
+- No shared state between clients
+- Own local model copy
+
+**Criteres de Succes:**
+- Client 1 et 2 tournent simultanément
+- Datasets différents par client
+- No race conditions
+- Both clients report metrics
+
+**Duree Estimee:** Days 3-5
+
+**Sous-taches:**
+1. Adapt Client 1 code for Client 2
+2. Load Hospital 2 data
+3. Test simultaneous execution
+4. Verify no state sharing
+5. Check metrics independence
+
+---
+
+#### Tache 3.4: Training Loop Implementation
+**Description:** Développer les boucles d'entraînement local avec synchronisation.
+
+**Livraables:**
+- training.py: Module d'entraînement
+
+**Requirements:**
+
+**Training Loop Structure:**
+```
+for epoch in range(local_epochs):
+  for batch in train_loader:
+    forward_pass
+    loss_computation
+    backward_pass
+    weight_update
+    metrics_update
+return updated_weights, num_samples, metrics
+```
+
+**Loss Function:**
+- CrossEntropyLoss pour classification
+
+**Metrics:**
+- Accuracy: (correct predictions / total)
+- Loss: average per batch
+- Per-class metrics optionnel
+
+**Optimization:**
+- Optimizer: SGD (lr=0.01) or Adam (lr=0.001)
+- Batch size: 32
+- Local epochs: 1-3
+
+**Validation:**
+- After each local epoch
+- On validation set (30% data)
+- Early stopping optionnel
+
+**Criteres de Succes:**
+- Loss diminue par epoch (observable)
+- Accuracy augmente
+- Metrics reportés sans erreurs
+- Training time < 30s per epoch
+
+**Duree Estimee:** Days 4-6
+
+**Sous-taches:**
+1. Implement forward pass
+2. Implement loss computation
+3. Implement backward pass
+4. Implement weight update
+5. Implement metrics tracking
+6. Implement validation loop
+7. Benchmark training time
+
+---
+
+#### Tache 3.5: Kafka Communication
+**Description:** Intégrer la communication Kafka dans les clients (envoi/réception de poids).
+
+**Livraables:**
+- client_kafka_integration.py: Integration Kafka côté client
+
+**Requirements:**
+
+**Envoi de Poids (Client -> Serveur):**
+- Après fit(), sérialiser poids (utiliser model_serializer.py de P1)
+- Publier dans topic "model_updates"
+- Format: {client_id, round_id, weights, num_samples}
+- Latency: < 2s
+
+**Réception du Modèle Global (Serveur -> Client):**
+- Subscribe à topic "global_model"
+- Écouter les messages
+- Désérialiser et charger poids dans modèle local
+- Synchronisation avec Flower loop
+
+**Synchronisation avec Flower:**
+- Recevoir poids du serveur via receive_weights() ou similar
+- Envoyer poids locaux via send_weights()
+- Non-blocking operations
+
+**Error Handling:**
+- Timeout si pas de réponse > 30s
+- Retry logic
+- Graceful failure
+
+**Criteres de Succes:**
+- Poids envoyés < 2s après training
+- Modèle global reçu complètement
+- Synchronisation correcte avec Flower
+- 0 perte de données
+
+**Duree Estimee:** Days 5-7
+
+**Sous-taches:**
+1. Create Kafka producer for client
+2. Create Kafka consumer for client
+3. Implement send_weights() function
+4. Implement receive_weights() function
+5. Integrate with fit() method
+6. Handle timeouts
+7. Integration tests with server
+
+---
+
+#### Tache 3.6: Multi-Client Testing
+**Description:** Tester le système avec 2 clients simultanés et vérifier la convergence globale.
+
+**Livraables:**
+- docker-compose.clients.yml: Orchestration des 2 clients
+- README_CLIENTS.md: Documentation clients
+
+**Testing Objectives:**
+- Launch 2 clients en même temps
+- Run 3-5 federated rounds
+- Verify global model convergence
+- Benchmark: time per round, total time
+
+**Convergence Verification:**
+- Accuracy globale > accuracy locales moyennes
+- Loss global doit diminuer à chaque round
+- Observable improvement sur les 5 rounds
+
+**Docker Compose:**
+- Services: flower_server, client_1, client_2
+- Network: shared network
+- Health checks: each service
+- Logs: aggregated pour debugging
+
+**Criteres de Succes:**
+- 0 deadlocks during execution
+- Global accuracy > local accuracies
+- Convergence observable
+- All metrics logged and accessible
+- < 10 minutes pour 5 rounds
+
+**Duree Estimee:** Days 7-9
+
+**Sous-taches:**
+1. Create docker-compose for clients
+2. Launch server + 2 clients
+3. Monitor execution
+4. Verify 5 rounds completed
+5. Analyze convergence curves
+6. Benchmark performance
+7. Write comprehensive documentation
+
+---
+
+### 3.4 PERSONNE 4: Monitoring + Dashboard
+
+#### Tache 4.1: Prometheus Configuration
+**Description:** Setup Prometheus pour scraper les métriques de tous les services.
+
+**Livraables:**
+- prometheus.yml: Configuration Prometheus
+- Dockerfile.prometheus: Image Docker
+
+**Requirements:**
+
+**prometheus.yml Configuration:**
+- Global scrape_interval: 5s (pour monitoring temps réel)
+- Scrape timeout: 10s
+
+**Job Definitions:**
+1. flower_server: localhost:8000/metrics
+2. client_hospital_1: localhost:8001/metrics
+3. client_hospital_2: localhost:8002/metrics
+
+**Metrics to Scrape:**
+- federated_rounds_total (Counter)
+- global_model_accuracy (Gauge)
+- global_model_loss (Gauge)
+- local_model_accuracy (Gauge, with label client_id)
+- local_model_loss (Gauge, with label client_id)
+- training_time_seconds (Histogram, with label client_id)
+- kafka_messages_sent_total (Counter, with label topic)
+- kafka_latency_ms (Histogram, with label topic)
+
+**Docker Setup:**
+- Base image: prom/prometheus:latest
+- Mount prometheus.yml as config
+- Expose port 9090
+- Data volume for persistence (optional)
+
+**Criteres de Succes:**
+- Prometheus démarre sans erreurs
+- Scrapes 3 targets successfully
+- All metrics visible in Prometheus UI
+- No errors in logs
+- 5s scrape interval working
+
+**Duree Estimee:** Days 1-2
+
+**Sous-taches:**
+1. Design metrics strategy
+2. Create prometheus.yml
+3. Configure scrape targets
+4. Create Dockerfile
+5. Build and test Docker image
+6. Verify scraping works
+7. Test with fake metrics
+
+---
+
+#### Tache 4.2: Metrics Exporter Implementation
+**Description:** Développer un module Python pour exporter les métriques Prometheus.
+
+**Livraables:**
+- metrics_exporter.py: Module d'export des métriques
+
+**Requirements:**
+
+**Prometheus Metrics (utiliser prometheus_client library):**
+
+**Server Metrics:**
+- Counter: federated_rounds_total (total rounds)
+- Gauge: global_model_accuracy (current accuracy)
+- Gauge: global_model_loss (current loss)
+- Gauge: clients_connected (number of connected clients)
+- Gauge: aggregation_time_seconds (time to aggregate weights)
+
+**Client Metrics (with label client_id):**
+- Gauge: local_model_accuracy
+- Gauge: local_model_loss
+- Gauge: local_epochs_completed
+- Gauge: local_data_size (number of samples)
+- Histogram: training_time_seconds
+
+**Kafka Metrics (with label topic):**
+- Counter: kafka_messages_sent_total
+- Counter: kafka_messages_received_total
+- Counter: kafka_errors_total
+- Histogram: kafka_latency_ms
+- Gauge: kafka_queue_size
+
+**HTTP Endpoints:**
+- /metrics: Standard Prometheus metrics endpoint (port 8000 for server, 8001 for client1, 8002 for client2)
+
+**Implementation:**
+- Server should start HTTP server on port exposing metrics
+- Each client should start on own port
+- Update metrics in real-time during execution
+
+**Criteres de Succes:**
+- Metrics exposed on /metrics endpoint
+- Valid Prometheus format
+- All metrics list présents et accessible
+- Update frequency: every 1s minimum
+- No performance impact on main application
+
+**Duree Estimee:** Days 2-4
+
+**Sous-taches:**
+1. Study prometheus_client library
+2. Design metrics schema
+3. Implement server metrics exporter
+4. Implement client metrics exporter
+5. Implement Kafka metrics exporter
+6. Create HTTP endpoints
+7. Integration tests with Prometheus
+
+---
+
+#### Tache 4.3: Grafana Setup et Integration
+**Description:** Configurer Grafana et intégrer la datasource Prometheus.
+
+**Livraables:**
+- docker-compose.monitoring.yml: Orchestration monitoring
+- grafana-setup.sh: Script de setup initial
+
+**Requirements:**
+
+**Grafana Setup:**
+- Base image: grafana/grafana:latest
+- Expose port: 3000
+- Admin credentials: setup via environment
+- Volume pour persistence de config/dashboards
+
+**Datasource Configuration:**
+- Type: Prometheus
+- URL: http://prometheus:9090
+- Access: Server
+- Authentication: None (development)
+
+**Initialization:**
+- Auto-provision datasource via .yml file
+- Auto-provision dashboards (optional)
+
+**docker-compose.monitoring.yml:**
+- Services: prometheus, grafana
+- Network: shared network
+- Health checks: functional
+
+**Setup Script (grafana-setup.sh):**
+- Clone Grafana directories
+- Inject datasource config
+- Inject dashboard configurations (if applicable)
+
+**Criteres de Succes:**
+- Grafana accessible on port 3000
+- Admin login works
+- Prometheus datasource connected and healthy
+- Test query successful (can query any metric)
+- All services start together
+
+**Duree Estimee:** Days 3-5
+
+**Sous-taches:**
+1. Create docker-compose.monitoring.yml
+2. Configure Prometheus service
+3. Configure Grafana service
+4. Setup datasource provisioning
+5. Create setup script
+6. Test datasource connection
+7. Document setup process
+
+---
+
+#### Tache 4.4: Overview Dashboard
+**Description:** Créer le dashboard principal affichant les métriques globales de fédération.
+
+**Livraables:**
+- dashboard_overview.json: Fichier dashboard JSON
+
+**Dashboard Panels (minimum 4):**
+
+**Panel 1: Global Loss (Timeseries)**
+- Query: global_model_loss
+- Type: Line chart
+- Time range: Last 1 hour
+- Y-axis: Loss value
+- Legend: show
+- Target: single line showing loss over time
+
+**Panel 2: Global Accuracy (Timeseries)**
+- Query: global_model_accuracy
+- Type: Line chart
+- Time range: Last 1 hour
+- Y-axis: Accuracy (0-1)
+- Legend: show
+
+**Panel 3: Federated Rounds Completed (Gauge)**
+- Query: federated_rounds_total (current value)
+- Type: Gauge
+- Min: 0
+- Max: 10
+- Show: current value + text
+
+**Panel 4: Average Time per Round (Gauge)**
+- Query: aggregation_time_seconds
+- Type: Gauge
+- Unit: seconds
+- Min: 0
+- Max: 60
+
+**Layout:**
+- Responsive grid layout
+- 2x2 panel arrangement
+- Professional styling
+- Color scheme: blue/green (good), red (bad)
+
+**Refresh Rate:** 5-10 seconds
+
+**Annotations:**
+- Mark milestones (Day 3, 6, 9, 10) if applicable
+
+**Criteres de Succes:**
+- 4+ panels visible
+- Live data updates every 5-10s
+- Meaningful colors (decreasing loss = good)
+- Legend clear and understandable
+- Professional appearance
+
+**Duree Estimee:** Days 5-7
+
+**Sous-taches:**
+1. Design dashboard layout
+2. Create loss timeseries panel
+3. Create accuracy timeseries panel
+4. Create rounds gauge panel
+5. Create time-per-round gauge
+6. Apply styling and colors
+7. Test
