@@ -34,7 +34,7 @@ Le système repose sur une architecture moderne combinant :
 ---
 
 ## 📁 Structure du Projet
-
+<pre>
 Cardio_Federated_Project/
 │
 ├── client/ # Client hospitalier
@@ -65,7 +65,7 @@ Cardio_Federated_Project/
 ├── requirements-dev.txt # Environnement global de développement
 ├── .gitignore
 └── README.md
-
+</pre>
 ---
 
 ## 🚀 Démarrage Rapide
