@@ -72,7 +72,7 @@ Cardio_Federated_Project/
 
 1. **Prérequis** :
    - Docker & Docker Compose
-   - Python 3.8+
+   - Python 3.10+
 
 2. **Installation enveronement** :
    ```bash
