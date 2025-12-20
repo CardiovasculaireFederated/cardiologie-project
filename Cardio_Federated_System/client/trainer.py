@@ -23,7 +23,7 @@ def train_epoch(model, dataloader, optimizer, loss_fn, device):
         
         # Vérifier si loss est NaN
         if torch.isnan(loss):
-            print(f"⚠️  NaN détecté au batch {batch_idx}! Skip...")
+            print(f" NaN détecté au batch {batch_idx}! Skip...")
             continue
         
         loss.backward()
