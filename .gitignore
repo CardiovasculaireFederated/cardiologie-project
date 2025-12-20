@@ -7,3 +7,16 @@ __pycache__/
 *.parquet
 *.csv
 .DS_Store
+venv/
+__pycache__/
+*.parquet
+.DS_Store
+check_install.py
+README.md
+test_spark_fixed.py
+test_spark.py
+TROUBLESHOOTING_WINDOWS.md
+README.md
+test_simple.py
+SPRINT1_COMPLETED.md
+README.md
