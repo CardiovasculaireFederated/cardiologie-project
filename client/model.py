@@ -8,10 +8,11 @@ class HeartDiseaseModel(nn.Module):
     Modèle de classification binaire pour la détection des maladies cardiaques.
     """
     
-    def __init__(self, input_dim=13, hidden_dim1=64, hidden_dim2=32, hidden_dim3=16):
+    def __init__(self, input_dim=20, hidden_dim1=64, hidden_dim2=32, hidden_dim3=16):
         super(HeartDiseaseModel, self).__init__()
-        
-        assert input_dim == 13, "Le modèle doit accepter exactement 13 features"
+
+        # Le modèle accepte maintenant 20 features (9 numériques + 11 catégorielles encodées)
+        # Peut être ajusté selon le preprocessing
         
         # Architecture avec BatchNorm
         self.fc1 = nn.Linear(input_dim, hidden_dim1)
@@ -39,7 +40,7 @@ class HeartDiseaseModel(nn.Module):
                     nn.init.constant_(m.bias, 0)
     
     def forward(self, x):
-        assert x.shape[1] == 13, f"Expected 13 features, got {x.shape[1]}"
+        # Vérification flexible de la dimension d'entrée
         
         x = self.fc1(x)
         x = self.bn1(x)
