@@ -237,8 +237,5 @@ def main():
         time.sleep(SLEEP_BETWEEN_ROUNDS)
 
 
-
-
-
 if __name__ == "__main__":
     main()
