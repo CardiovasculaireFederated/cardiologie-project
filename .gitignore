@@ -7,3 +7,5 @@ __pycache__/
 *.parquet
 *.csv
 .DS_Store
+test_pipeline.py
+PIPELINE_USAGE.md
