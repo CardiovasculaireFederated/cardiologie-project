@@ -1,22 +1,167 @@
-version: "3.8"
+version: '3.8'
+
+# Définition du réseau custom - OBLIGATOIRE
+networks:
+  fl_network:
+    driver: bridge
+    name: fl_network
 
 services:
-  kafka:
-    extends:
-      file: infrastructure/kafka-compose.yml
-      service: kafka
-
+  # ============================================
+  # ZOOKEEPER - Requis pour Kafka
+  # ============================================
   zookeeper:
-    extends:
-      file: infrastructure/kafka-compose.yml
-      service: zookeeper
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - fl_network
+    healthcheck:
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # ============================================
+  # KAFKA BROKER - Configuration CRITIQUE
+  # ============================================
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"  # Port externe (host)
+    environment:
+      # ⚠️ CONFIGURATION CRITIQUE POUR INTER-CONTAINERS
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      
+      # 🔥 CETTE LIGNE EST CRUCIALE - listeners internes
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      
+      # 🔥 CETTE LIGNE EST LA PLUS IMPORTANTE - comment les clients trouvent Kafka
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+    networks:
+      - fl_network
+    healthcheck:
+      test: ["CMD", "kafka-broker-api-versions", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  # ============================================
+  # CLIENTS FEDERATED LEARNING
+  # ============================================
+  client_1:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: fl_client_1
+    environment:
+      CLIENT_ID: "client_1"
+      # 🔥 UTILISER LE NOM DU SERVICE, PAS localhost
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      FL_SERVER_URL: "http://server:8000"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - fl_network
+    volumes:
+      - ./client/data:/app/data
+    restart: unless-stopped
+
+  client_2:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: fl_client_2
+    environment:
+      CLIENT_ID: "client_2"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      FL_SERVER_URL: "http://server:8000"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - fl_network
+    volumes:
+      - ./client/data:/app/data
+    restart: unless-stopped
+
+  # ============================================
+  # SERVEUR FEDERATED LEARNING
+  # ============================================
   server:
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: fl_server
+    ports:
+      - "8000:8000"  # API + Métriques Prometheus
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      SERVER_PORT: "8000"
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
+    networks:
+      - fl_network
+    volumes:
+      - ./server/models:/app/models
+    restart: unless-stopped
 
-  client:
-    build: ./client
+  # ============================================
+  # PROMETHEUS - Monitoring
+  # ============================================
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - fl_network
+    restart: unless-stopped
+
+  # ============================================
+  # GRAFANA - Dashboards
+  # ============================================
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_USER: admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - fl_network
     depends_on:
-      - kafka
+      - prometheus
+    restart: unless-stopped
+
+volumes:
+  prometheus_data:
+  grafana_data:
