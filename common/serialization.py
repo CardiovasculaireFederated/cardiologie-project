@@ -10,6 +10,10 @@ from typing import Union, Any
 import pandas as pd
 import numpy as np
 
+import io
+import torch
+from typing import Dict
+
 
 logger = logging.getLogger(__name__)
 
@@ -156,3 +160,33 @@ class NumpyEncoder(json.JSONEncoder):
         elif isinstance(obj, (np.bool_)):
             return bool(obj)
         return super().default(obj)
+
+
+def weights_to_bytes(weights: Dict) -> bytes:
+    """
+    Serialize PyTorch model weights (state_dict) to bytes.
+    Used for Kafka transmission in federated learning.
+    """
+    try:
+        buffer = io.BytesIO()
+        torch.save(weights, buffer)
+        buffer.seek(0)
+        return buffer.read()
+
+    except Exception as e:
+        logger.error(f"Failed to serialize model weights: {str(e)}")
+        raise
+
+def bytes_to_weights(bytes_data: bytes) -> Dict:
+    """
+    Deserialize bytes back to PyTorch model weights (state_dict).
+    Used when receiving weights from Kafka.
+    """
+    try:
+        buffer = io.BytesIO(bytes_data)
+        weights = torch.load(buffer, map_location="cpu")
+        return weights
+
+    except Exception as e:
+        logger.error(f"Failed to deserialize model weights: {str(e)}")
+        raise
