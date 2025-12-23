@@ -8,3 +8,5 @@ __pycache__/
 *.csv
 .DS_Store
 .env
+test_pipeline.py
+PIPELINE_USAGE.md
