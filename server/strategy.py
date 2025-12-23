@@ -1,11 +1,14 @@
 import flwr as fl
 from typing import List, Tuple, Dict, Optional
 from flwr.common import Metrics
+from evaluation import evaluate_global_model
+from data_base import save_global_model
 
+var=0
 class CardioStrategy(fl.server.strategy.FedAvg):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-
+    
     def aggregate_fit(
         self,
         server_round: int,
@@ -17,8 +20,10 @@ class CardioStrategy(fl.server.strategy.FedAvg):
         aggregated_weights, aggregated_metrics = super().aggregate_fit(server_round, results, failures)
         
         if aggregated_weights is not None:
+            accuracy = evaluate_global_model(aggregated_weights)
             print(f"Round {server_round} : Agrégation des poids réussie.")
-            
+            mdel_name =f"model_{var}_{server_round}"
+            save_global_model(mdel_name,aggregated_weights,accuracy)
         return aggregated_weights, aggregated_metrics
 
 def get_weighted_average_fn():

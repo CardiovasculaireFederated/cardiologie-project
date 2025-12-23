@@ -109,6 +109,92 @@ docker-compose up --build
 
 ---
 
+# 📘 Cardiology Federated Learning — Base de données
+
+## 📌 Objectif
+
+Cette base de données est conçue pour le projet **Cardiology Federated Learning**.  
+Elle permet de :
+
+- Stocker les modèles globaux fédérés.
+- Enregistrer la précision (accuracy) par round.
+- Sélectionner le meilleur modèle global selon ses performances.
+
+---
+
+## 🧰 Technologies utilisées
+
+- **PostgreSQL** — Système de gestion de base de données relationnelle.  
+- **pgAdmin** — Outil web pour administrer PostgreSQL.  
+- **Docker / Docker Compose** — Pour virtualiser et orchestrer les services.
+
+---
+
+## 🗂️ Arborescence recommandée
+
+cardiologie-project/
+├── database/
+│ ├── docker-compose.yml
+│ └── generate_table.py
+├── server/
+├── client/
+└── README.md
+
+
+---
+
+## 🐳 1️⃣ Lancer PostgreSQL et pgAdmin avec Docker
+
+### 📄 `database/docker-compose.yml`
+
+
+### ▶️ Démarrer les services
+
+ Depuis le dossier `database/`, exécute la commande :
+
+```bash
+docker-compose up -d
+```
+
+
+---
+
+## 🧩 2️⃣ Configuration de pgAdmin
+
+### 🌐 Accès à l’interface
+
+Ouvre ton navigateur à l’adresse :  
+👉 [http://localhost:5050](http://localhost:5050)
+
+### 🔐 Informations de connexion
+
+- **Email :** admin.com  
+- **Mot de passe :** admin 
+
+### ➕ Ajouter le serveur PostgreSQL
+
+Dans **pgAdmin** :
+
+1. Clique sur *Add New Server*.  
+2. **General → Name :** `Cardio_Postgres`  
+3. **Connection →**  
+   - Host name : `postgres`  
+   - Port : `5432`  
+   - Database : `database_card`  
+   - Username : `admin`  
+   - Password : `cardio111`  
+   - ✔️ Coche *Save password*  
+4. Clique sur **Save** ✅
+
+---
+
+## 🧱 3️⃣ Création des tables SQL
+Depuis le dossier `database/generate_tables.py`, exécute la commande :
+
+```bash
+python generate_tables.py
+```
+
 ## 📚 Documentation
 
 - [Documentation](https://github.com/your-repo/Cardio_Federated_Project/blob/main/README.md)
