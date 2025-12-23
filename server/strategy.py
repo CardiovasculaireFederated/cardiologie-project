@@ -24,6 +24,7 @@ class CardioStrategy(fl.server.strategy.FedAvg):
             print(f"Round {server_round} : Agrégation des poids réussie.")
             mdel_name =f"model_{var}_{server_round}"
             save_global_model(mdel_name,aggregated_weights,accuracy)
+            var++
         return aggregated_weights, aggregated_metrics
 
 def get_weighted_average_fn():
