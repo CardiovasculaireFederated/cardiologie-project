@@ -5,14 +5,15 @@ Serialization utilities for data saving and loading.
 import logging
 import json
 from pathlib import Path
-from typing import Union, Any
+from typing import Union, Any, Dict, Tuple
 
 import pandas as pd
 import numpy as np
 
 import io
 import torch
-from typing import Dict
+
+from common.kafka_topics import MESSAGE_DELIMITER
 
 
 logger = logging.getLogger(__name__)
@@ -189,4 +190,37 @@ def bytes_to_weights(bytes_data: bytes) -> Dict:
 
     except Exception as e:
         logger.error(f"Failed to deserialize model weights: {str(e)}")
+        raise
+
+
+def encode_kafka_message(metadata: Dict[str, Any], weights: Dict) -> bytes:
+    """
+    Encode metadata and weights into a Kafka message payload.
+    Format: <json metadata>|||<weights bytes>
+    """
+    try:
+        if not isinstance(metadata, dict):
+            raise ValueError("Metadata must be a dict")
+        meta_json = json.dumps(metadata, cls=NumpyEncoder).encode("utf-8")
+        weights_bytes = weights_to_bytes(weights)
+        return meta_json + MESSAGE_DELIMITER + weights_bytes
+    except Exception as e:
+        logger.error(f"Failed to encode Kafka message: {str(e)}")
+        raise
+
+
+def decode_kafka_message(message_bytes: bytes) -> Tuple[Dict[str, Any], Dict]:
+    """
+    Decode a Kafka message payload into metadata and weights.
+    Expected format: <json metadata>|||<weights bytes>
+    """
+    try:
+        meta_part, weights_part = message_bytes.split(MESSAGE_DELIMITER, 1)
+        metadata = json.loads(meta_part.decode("utf-8"))
+        weights = bytes_to_weights(weights_part)
+        if not isinstance(metadata, dict):
+            raise ValueError("Decoded metadata is not a dict")
+        return metadata, weights
+    except Exception as e:
+        logger.error(f"Failed to decode Kafka message: {str(e)}")
         raise

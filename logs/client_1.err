@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\Cardiologie\client\client.py", line 6, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'

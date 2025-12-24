@@ -1,17 +1,17 @@
 # server/kafka_server.py
 
-import json
 import logging
+import os
 import time
-from typing import List, Dict
+from pathlib import Path
+from typing import Dict, List
 
 import torch
+from dotenv import load_dotenv
 from kafka import KafkaConsumer, KafkaProducer
 
-from common.serialization import (
-    bytes_to_weights,
-    weights_to_bytes,
-)
+from common.kafka_topics import CLIENT_WEIGHTS_TOPIC, GLOBAL_MODEL_TOPIC
+from common.serialization import decode_kafka_message, encode_kafka_message
 
 # --------------------------------------------------
 # Logging
@@ -20,76 +20,74 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("kafka_server")
 
 # --------------------------------------------------
-# Kafka Config
+# Config
 # --------------------------------------------------
-KAFKA_BOOTSTRAP_SERVERS = ["kafka:9092"]
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
-CLIENT_WEIGHTS_TOPIC = "client_weights"
-GLOBAL_MODEL_TOPIC = "global_model"
+MODEL_PATH = os.getenv("MODEL_PATH", str(BASE_DIR / "best_model.pth"))
+
+KAFKA_BOOTSTRAP_SERVERS = os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
+AGGREGATION_WINDOW_SECONDS = float(
+    os.getenv("AGGREGATION_WINDOW_SECONDS", "2")
+)
+KAFKA_POLL_TIMEOUT_MS = int(
+    os.getenv("KAFKA_POLL_TIMEOUT_MS", "500")
+)
 
 # --------------------------------------------------
-# Federated Config (Prototype)
+# Federated Config
 # --------------------------------------------------
-MIN_CLIENTS_PER_ROUND = 2
-SLEEP_BETWEEN_ROUNDS = 2  # seconds
+MIN_CLIENTS_PER_ROUND = 1
+SLEEP_BETWEEN_ROUNDS = float(os.getenv("SLEEP_BETWEEN_ROUNDS", "0"))
 
-def create_consumer():
+
+def parse_bootstrap_servers(value: str) -> List[str]:
+    if not value:
+        return ["kafka:9092"]
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def load_initial_weights(model_path: str) -> Dict[str, torch.Tensor]:
+    if not os.path.exists(model_path):
+        raise FileNotFoundError(f"Model path not found: {model_path}")
+    return torch.load(model_path, map_location=torch.device("cpu"))
+
+
+def create_consumer(bootstrap_servers: List[str]) -> KafkaConsumer:
     return KafkaConsumer(
         CLIENT_WEIGHTS_TOPIC,
-        bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+        bootstrap_servers=bootstrap_servers,
         auto_offset_reset="latest",
         enable_auto_commit=True,
         value_deserializer=lambda v: v,
     )
 
 
-def create_producer():
+def create_producer(bootstrap_servers: List[str]) -> KafkaProducer:
     return KafkaProducer(
-        bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
+        bootstrap_servers=bootstrap_servers,
         value_serializer=lambda v: v,
     )
 
-def parse_client_message(message_bytes: bytes):
-    """
-    Expected format:
-    b'<json metadata>|||<weights bytes>'
-    """
-    try:
-        meta_part, weights_part = message_bytes.split(b"|||", 1)
-        metadata = json.loads(meta_part.decode("utf-8"))
-        weights = bytes_to_weights(weights_part)
 
-        return metadata, weights
-
-    except Exception as e:
-        logger.error(f"Failed to parse client message: {e}")
-        return None, None
-
-
-def aggregate_weights(weights_list: List[Dict[str, torch.Tensor]]):
-    """
-    Simple average of model weights (FedAvg prototype).
-    """
+def aggregate_weights(weights_list: List[Dict[str, torch.Tensor]]) -> Dict[str, torch.Tensor]:
     if not weights_list:
-        return None
+        return {}
 
-    aggregated = {}
-
+    aggregated: Dict[str, torch.Tensor] = {}
     for key in weights_list[0].keys():
         aggregated[key] = torch.stack(
             [w[key] for w in weights_list], dim=0
         ).mean(dim=0)
-
     return aggregated
+
 
 def validate_metadata(
     metadata: Dict,
     current_round: int,
     received_clients: set,
-):
-    """
-    Validate client metadata before aggregation.
-    """
+) -> bool:
     required_fields = [
         "client_id",
         "round_id",
@@ -99,29 +97,28 @@ def validate_metadata(
         "val_size",
     ]
 
-    # 1. Check required fields
     for field in required_fields:
         if field not in metadata:
             logger.error(f"Metadata missing field: {field}")
             return False
 
-    # 2. Round consistency
     if metadata["round_id"] != current_round:
         logger.warning(
-            f"Round mismatch: client_round={metadata['round_id']} "
-            f"server_round={current_round}"
+            "Round mismatch: client_round=%s server_round=%s",
+            metadata["round_id"],
+            current_round,
         )
         return False
 
-    # 3. Unique client per round
     client_id = metadata["client_id"]
     if client_id in received_clients:
         logger.warning(
-            f"Duplicate update from client {client_id} in round {current_round}"
+            "Duplicate update from client %s in round %s",
+            client_id,
+            current_round,
         )
         return False
 
-    # 4. Numeric sanity checks
     if metadata["epochs"] <= 0:
         logger.error("Invalid epochs value")
         return False
@@ -137,107 +134,167 @@ def validate_metadata(
     return True
 
 
+def build_global_metadata(round_id: int) -> Dict:
+    return {
+        "round_id": round_id,
+        "message_type": "global_model",
+    }
 
-def main():
+
+def send_global_model(
+    producer: KafkaProducer,
+    weights: Dict[str, torch.Tensor],
+    round_id: int,
+) -> None:
+    metadata = build_global_metadata(round_id)
+    payload = encode_kafka_message(metadata, weights)
+    producer.send(GLOBAL_MODEL_TOPIC, value=payload)
+    producer.flush()
+    logger.info("Global model sent to Kafka (%s)", GLOBAL_MODEL_TOPIC)
+
+
+def should_aggregate(
+    window_start: float | None,
+    buffer_size: int,
+) -> bool:
+    if buffer_size < MIN_CLIENTS_PER_ROUND:
+        return False
+    if AGGREGATION_WINDOW_SECONDS <= 0:
+        return True
+    if window_start is None:
+        return False
+    return (time.time() - window_start) >= AGGREGATION_WINDOW_SECONDS
+
+
+def summarize_round(
+    current_round: int,
+    buffer_metadata: List[Dict],
+    round_start_time: float,
+    invalid_messages: int,
+) -> None:
+    round_duration = time.time() - round_start_time
+
+    val_accs = [
+        m.get("best_val_acc", 0.0)
+        for m in buffer_metadata
+        if m.get("best_val_acc") is not None
+    ]
+
+    if val_accs:
+        avg_acc = sum(val_accs) / len(val_accs)
+        min_acc = min(val_accs)
+        max_acc = max(val_accs)
+    else:
+        avg_acc = 0.0
+        min_acc = 0.0
+        max_acc = 0.0
+
+    logger.info(
+        "[ROUND %s SUMMARY] clients=%s | avg_acc=%.4f | min_acc=%.4f | "
+        "max_acc=%.4f | duration=%.2fs | invalid_msgs=%s",
+        current_round,
+        len(buffer_metadata),
+        avg_acc,
+        min_acc,
+        max_acc,
+        round_duration,
+        invalid_messages,
+    )
+
+
+def main() -> None:
     current_round = 1
-    received_clients = set()
+    received_clients: set = set()
 
-    consumer = create_consumer()
-    producer = create_producer()
+    bootstrap_servers = parse_bootstrap_servers(KAFKA_BOOTSTRAP_SERVERS)
+    consumer = create_consumer(bootstrap_servers)
+    producer = create_producer(bootstrap_servers)
 
-    logger.info("Kafka Federated Server started (Sprint 2 Prototype)")
+    logger.info("Kafka Federated Server started (Sprint 2)")
 
-    buffer_weights = []
-    buffer_metadata = []
+    try:
+        initial_weights = load_initial_weights(MODEL_PATH)
+        send_global_model(producer, initial_weights, round_id=0)
+    except Exception as exc:
+        logger.error(f"Failed to send initial global model: {exc}")
+        raise
 
+    buffer_weights: List[Dict[str, torch.Tensor]] = []
+    buffer_metadata: List[Dict] = []
     round_start_time = time.time()
     invalid_messages = 0
+    window_start: float | None = None
 
+    while True:
+        records = consumer.poll(timeout_ms=KAFKA_POLL_TIMEOUT_MS)
 
-    for message in consumer:
-        metadata, weights = parse_client_message(message.value)
+        if should_aggregate(window_start, len(buffer_weights)):
+            logger.info("Aggregating client weights...")
+            global_weights = aggregate_weights(buffer_weights)
 
-        if metadata is None or weights is None:
-            continue
+            if not global_weights:
+                logger.error("Aggregation failed, skipping round")
+            else:
+                send_global_model(
+                    producer,
+                    global_weights,
+                    round_id=current_round,
+                )
+                summarize_round(
+                    current_round,
+                    buffer_metadata,
+                    round_start_time,
+                    invalid_messages,
+                )
 
-        if not validate_metadata(metadata, current_round, received_clients):
-            logger.warning("Invalid metadata, skipping update")
-            invalid_messages += 1
-            continue
-
-        received_clients.add(metadata["client_id"])
-
-
-        logger.info(
-            f"Received update from client={metadata.get('client_id')} "
-            f"round={metadata.get('round_id')} "
-            f"val_acc={metadata.get('best_val_acc')}"
-        )
-
-        buffer_weights.append(weights)
-        buffer_metadata.append(metadata)
-
-        if len(buffer_weights) < MIN_CLIENTS_PER_ROUND:
-            logger.info(
-                f"Waiting for more clients "
-                f"({len(buffer_weights)}/{MIN_CLIENTS_PER_ROUND})"
-            )
-            continue
-
-        # -------- Aggregation --------
-        logger.info("Aggregating client weights...")
-        global_weights = aggregate_weights(buffer_weights)
-
-        if global_weights is None:
-            logger.error("Aggregation failed, skipping round")
             buffer_weights.clear()
             buffer_metadata.clear()
+            received_clients.clear()
+            current_round += 1
+            round_start_time = time.time()
+            window_start = None
+
+            if SLEEP_BETWEEN_ROUNDS > 0:
+                time.sleep(SLEEP_BETWEEN_ROUNDS)
+
             continue
 
-        # -------- Send global model --------
-        payload = weights_to_bytes(global_weights)
+        for _, messages in records.items():
+            for message in messages:
+                try:
+                    metadata, weights = decode_kafka_message(message.value)
+                except Exception as exc:
+                    logger.error(f"Failed to parse client message: {exc}")
+                    invalid_messages += 1
+                    continue
 
-        producer.send(GLOBAL_MODEL_TOPIC, value=payload)
-        producer.flush()
+                data_validation = metadata.get("data_validation", {})
+                if metadata.get("skip_training") or data_validation.get("status") == "failed":
+                    logger.info(
+                        "Client %s skipped training for round %s",
+                        metadata.get("client_id"),
+                        metadata.get("round_id"),
+                    )
+                    continue
 
-        logger.info(
-            f"Global model sent to Kafka ({GLOBAL_MODEL_TOPIC})"
-        )
+                if not validate_metadata(metadata, current_round, received_clients):
+                    logger.warning("Invalid metadata, skipping update")
+                    invalid_messages += 1
+                    continue
 
+                received_clients.add(metadata["client_id"])
+                buffer_weights.append(weights)
+                buffer_metadata.append(metadata)
 
-        round_duration = time.time() - round_start_time
+                if window_start is None:
+                    window_start = time.time()
 
-        val_accs = [
-            m.get("best_val_acc", 0.0)
-            for m in buffer_metadata
-            if m.get("best_val_acc") is not None
-        ]
-
-        avg_acc = sum(val_accs) / len(val_accs) if val_accs else 0.0
-
-        logger.info(
-            f"[ROUND {current_round} SUMMARY] "
-            f"clients={len(buffer_metadata)} | "
-            f"avg_acc={avg_acc:.4f} | "
-            f"min_acc={min(val_accs):.4f} | "
-            f"max_acc={max(val_accs):.4f} | "
-            f"duration={round_duration:.2f}s | "
-            f"invalid_msgs={invalid_messages}"
-        )
-
-
-        # Reset buffers for next round
-        buffer_weights.clear()
-        buffer_metadata.clear()
-
-        received_clients.clear()
-        current_round += 1
-
-
-        time.sleep(SLEEP_BETWEEN_ROUNDS)
-
-
-
+                logger.info(
+                    "Received update from client=%s round=%s val_acc=%s",
+                    metadata.get("client_id"),
+                    metadata.get("round_id"),
+                    metadata.get("best_val_acc"),
+                )
 
 
 if __name__ == "__main__":

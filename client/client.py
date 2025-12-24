@@ -1,18 +1,18 @@
 # client/client.py
 import os
-import json
 import logging
+from typing import List
+
 import torch
 from kafka import KafkaConsumer, KafkaProducer
+
 from client.data_validator import DataValidatorAgent
 
 from client.model import HeartDiseaseModel
 from client.data_loader import load_data
 from client.trainer import train_model
-from common.serialization import (
-    weights_to_bytes,
-    bytes_to_weights,
-)
+from common.kafka_topics import CLIENT_WEIGHTS_TOPIC, GLOBAL_MODEL_TOPIC
+from common.serialization import decode_kafka_message, encode_kafka_message
 from client.scout_agent import suggest_hyperparameters
 
 # --------------------------------------------------
@@ -23,14 +23,24 @@ logger = logging.getLogger("client")
 validator = DataValidatorAgent(min_samples=100)
 
 # --------------------------------------------------
+def parse_bootstrap_servers(value: str) -> List[str]:
+    if not value:
+        return ["kafka:9092"]
+    return [item.strip() for item in value.split(",") if item.strip()]
+
+
+# --------------------------------------------------
 # Config
 # --------------------------------------------------
-DATA_PATH = "/data/heart.csv"
+DATA_PATH = os.getenv("CLIENT_DATA_PATH", "data/processed/train.csv")
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-BATCH_SIZE = 32
+BATCH_SIZE = int(os.getenv("CLIENT_BATCH_SIZE", "32"))
 
 CLIENT_ID = os.getenv("CLIENT_ID", "hospital_1")
 ROUND_ID = 0
+KAFKA_BOOTSTRAP_SERVERS = parse_bootstrap_servers(
+    os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
+)
 
 # --------------------------------------------------
 # Model & History
@@ -42,15 +52,15 @@ training_history = []
 # Kafka
 # --------------------------------------------------
 consumer = KafkaConsumer(
-    "global_model",
-    bootstrap_servers=["kafka:9092"],
+    GLOBAL_MODEL_TOPIC,
+    bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
     auto_offset_reset="latest",
     enable_auto_commit=True,
     value_deserializer=lambda v: v,
 )
 
 producer = KafkaProducer(
-    bootstrap_servers=["kafka:9092"],
+    bootstrap_servers=KAFKA_BOOTSTRAP_SERVERS,
     value_serializer=lambda v: v,
 )
 
@@ -69,14 +79,22 @@ logger.info("Client is waiting for global model...")
 # Main loop
 # --------------------------------------------------
 for message in consumer:
-    ROUND_ID += 1
-    logger.info(f"Received global model from Kafka")
+    try:
+        meta, global_weights = decode_kafka_message(message.value)
+    except Exception as exc:
+        logger.error(f"Failed to decode global model message: {exc}")
+        continue
+
+    global_round = meta.get("round_id")
+    if isinstance(global_round, int):
+        ROUND_ID = global_round + 1
+    else:
+        ROUND_ID += 1
+
+    logger.info("Received global model from Kafka")
     logger.info(f"Starting training for round {ROUND_ID}")
 
-    # 1. Deserialize global weights
-    global_weights = bytes_to_weights(message.value)
-
-    # 2. Update local model
+    # 1. Update local model
     model.set_weights(global_weights)
 
     # 3. Data validation
@@ -92,11 +110,12 @@ for message in consumer:
         metadata = {
             "client_id": CLIENT_ID,
             "round_id": ROUND_ID,
-            "data_validation": validation_report
+            "data_validation": validation_report,
+            "skip_training": True,
         }
 
-        kafka_message = json.dumps({"metadata": metadata}).encode("utf-8")
-        producer.send("client_weights", value=kafka_message)
+        kafka_message = encode_kafka_message(metadata, model.get_weights())
+        producer.send(CLIENT_WEIGHTS_TOPIC, value=kafka_message)
         producer.flush()
         continue
 
@@ -143,16 +162,10 @@ for message in consumer:
 
     # 6. Serialize updated weights
     local_weights = result["weights"]
-    payload = weights_to_bytes(local_weights)
-
-    kafka_message = (
-        json.dumps({"metadata": metadata}).encode("utf-8")
-        + b"|||"
-        + payload
-    )
+    kafka_message = encode_kafka_message(metadata, local_weights)
 
     # 7. Send to Kafka
-    producer.send("client_weights", value=kafka_message)
+    producer.send(CLIENT_WEIGHTS_TOPIC, value=kafka_message)
     producer.flush()
 
     logger.info(f"Round {ROUND_ID} sent to Kafka by {CLIENT_ID}")

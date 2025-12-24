@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "C:\Users\user\Desktop\Cardiologie\server\kafka_server.py", line 9, in <module>
+    import torch
+ModuleNotFoundError: No module named 'torch'
