@@ -6,14 +6,14 @@ from typing import List
 import torch
 from kafka import KafkaConsumer, KafkaProducer
 
-from client.data_validator import DataValidatorAgent
+from .data_validator import DataValidatorAgent
 
-from client.model import HeartDiseaseModel
-from client.data_loader import load_data
-from client.trainer import train_model
+from .model import HeartDiseaseModel
+from .data_loader import load_data
+from .trainer import train_model
 from common.kafka_topics import CLIENT_WEIGHTS_TOPIC, GLOBAL_MODEL_TOPIC
 from common.serialization import decode_kafka_message, encode_kafka_message
-from client.scout_agent import suggest_hyperparameters
+from .scout_agent import suggest_hyperparameters
 
 # --------------------------------------------------
 # Logging

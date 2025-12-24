@@ -2,3 +2,6 @@ flwr == 1.25.0
 torch == 2.9.1
 pyspark == 4.1.0
 kafka-python == 2.3.0
+pandas
+scikit-learn
+numpy

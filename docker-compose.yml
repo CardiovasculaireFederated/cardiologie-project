@@ -64,8 +64,8 @@ services:
   # ============================================
   client_1:
     build:
-      context: ./client
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: client/Dockerfile
     container_name: fl_client_1
     environment:
       CLIENT_ID: "client_1"
@@ -78,13 +78,13 @@ services:
     networks:
       - fl_network
     volumes:
-      - ./client/data:/app/data
+      - ./data:/app/data
     restart: unless-stopped
 
   client_2:
     build:
-      context: ./client
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: client/Dockerfile
     container_name: fl_client_2
     environment:
       CLIENT_ID: "client_2"
@@ -96,30 +96,30 @@ services:
     networks:
       - fl_network
     volumes:
-      - ./client/data:/app/data
+      - ./data:/app/data
     restart: unless-stopped
 
   # ============================================
   # SERVEUR FEDERATED LEARNING
   # ============================================
-  server:
+  # 
+  
+  kafka_server:
     build:
-      context: ./server
-      dockerfile: Dockerfile
-    container_name: fl_server
-    ports:
-      - "8000:8000"  # API + Métriques Prometheus
+      context: .
+      dockerfile: server/Dockerfile
+    container_name: kafka_server
     environment:
       KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
-      SERVER_PORT: "8000"
     depends_on:
       kafka:
         condition: service_healthy
+    volumes:
+    - ./best_model.pth:/app/best_model.pth    
     networks:
       - fl_network
-    volumes:
-      - ./server/models:/app/models
     restart: unless-stopped
+
 
   # ============================================
   # PROMETHEUS - Monitoring
@@ -130,7 +130,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
