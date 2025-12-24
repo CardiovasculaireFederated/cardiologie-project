@@ -14,6 +14,7 @@ from .trainer import train_model
 from common.kafka_topics import CLIENT_WEIGHTS_TOPIC, GLOBAL_MODEL_TOPIC
 from common.serialization import decode_kafka_message, encode_kafka_message
 from .scout_agent import suggest_hyperparameters
+from .sentinel_agent import SentinelAgent
 
 # --------------------------------------------------
 # Logging
@@ -21,6 +22,7 @@ from .scout_agent import suggest_hyperparameters
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("client")
 validator = DataValidatorAgent(min_samples=100)
+sentinel = SentinelAgent()
 
 # --------------------------------------------------
 def parse_bootstrap_servers(value: str) -> List[str]:
@@ -140,6 +142,22 @@ for message in consumer:
         device=DEVICE
     )
 
+    history = result.get("history", {})
+    train_losses = history.get("train_loss", [])
+    val_accuracies = history.get("val_acc", [])
+    current_epoch = len(train_losses)
+
+    sentinel_result = sentinel.evaluate_training(
+        train_losses=train_losses,
+        val_accuracies=val_accuracies,
+        current_epoch=current_epoch,
+        round_id=ROUND_ID,
+    )
+    logger.info(
+        "[Sentinel] decision=%s",
+        sentinel_result.get("decision"),
+    )
+
     # 5. Update history
     training_history.append({
         "round": ROUND_ID,
@@ -157,8 +175,18 @@ for message in consumer:
         "train_size": len(train_loader.dataset),
         "val_size": len(val_loader.dataset),
         "best_val_acc": result.get("best_val_acc") or 0.0,
-        "data_validation": validation_report
+        "data_validation": validation_report,
+        "sentinel": sentinel_result,
     }
+
+    if sentinel_result.get("decision") == "reject":
+        metadata["skip_training"] = True
+        metadata["reason"] = "sentinel_reject"
+        kafka_message = encode_kafka_message(metadata, {})
+        producer.send(CLIENT_WEIGHTS_TOPIC, value=kafka_message)
+        producer.flush()
+        logger.info("Sentinel rejected update; metadata sent only")
+        continue
 
     # 6. Serialize updated weights
     local_weights = result["weights"]

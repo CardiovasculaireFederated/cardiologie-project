@@ -268,11 +268,32 @@ def main() -> None:
                     invalid_messages += 1
                     continue
 
+                client_id = metadata.get("client_id", "unknown")
+                sentinel_meta = metadata.get("sentinel", {})
+                decision = sentinel_meta.get("decision", "accept")
+
+                if decision == "reject":
+                    logger.warning(
+                        "[Sentinel][Server] client=%s decision=reject -> skipped",
+                        client_id,
+                    )
+                    continue
+                if decision == "early_stop":
+                    logger.warning(
+                        "[Sentinel][Server] client=%s decision=early_stop -> accepted",
+                        client_id,
+                    )
+                else:
+                    logger.info(
+                        "[Sentinel][Server] client=%s decision=accept -> accepted",
+                        client_id,
+                    )
+
                 data_validation = metadata.get("data_validation", {})
                 if metadata.get("skip_training") or data_validation.get("status") == "failed":
                     logger.info(
                         "Client %s skipped training for round %s",
-                        metadata.get("client_id"),
+                        client_id,
                         metadata.get("round_id"),
                     )
                     continue
@@ -282,7 +303,7 @@ def main() -> None:
                     invalid_messages += 1
                     continue
 
-                received_clients.add(metadata["client_id"])
+                received_clients.add(client_id)
                 buffer_weights.append(weights)
                 buffer_metadata.append(metadata)
 
@@ -291,7 +312,7 @@ def main() -> None:
 
                 logger.info(
                     "Received update from client=%s round=%s val_acc=%s",
-                    metadata.get("client_id"),
+                    client_id,
                     metadata.get("round_id"),
                     metadata.get("best_val_acc"),
                 )
