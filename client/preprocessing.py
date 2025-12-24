@@ -2,9 +2,18 @@
 # Pipeline de prétraitement intelligent pour données cardiaques en temps réel
 # Transformation Spark ML: Nettoyage → Encodage → Vectorisation → Normalisation
 
+import os
+
 from pyspark.sql.types import StructType, StructField, IntegerType, DoubleType, StringType
 from pyspark.sql.functions import col, when, isnan, isnull, mean, lit
-from pyspark.ml.feature import VectorAssembler, StandardScaler, StringIndexer, OneHotEncoder
+from pyspark.ml.feature import (
+    VectorAssembler,
+    StandardScaler,
+    StringIndexer,
+    OneHotEncoder,
+    ChiSqSelector,
+    VectorSlicer,
+)
 from pyspark.ml import Pipeline
 import numpy as np
 
@@ -128,14 +137,18 @@ def clean_missing_values(df):
     return df
 
 
-def build_preprocessing_pipeline():
+def build_preprocessing_pipeline(feature_engineering_mode=None, target_dim=None):
     """
-    Construit un pipeline Spark ML complet pour le prétraitement.
+    Build Spark ML preprocessing pipeline.
 
     Pipeline:
-    1. StringIndexer: Encode les catégorielles en indices numériques
-    2. VectorAssembler: Assemble toutes les features en un seul vecteur
-    3. StandardScaler: Normalise les features (mean=0, std=1)
+    1. StringIndexer: encode categorical columns
+    2. VectorAssembler: assemble features into a single vector
+    3. Feature selection: ChiSqSelector (supervised) or VectorSlicer (deterministic)
+    4. StandardScaler: normalize features (mean=0, std=1)
+
+    Feature selection is done at the Spark level to enforce a stable 13-dim
+    input for the PyTorch model and reduce noise before local training.
 
     Returns:
         Pipeline Spark ML
@@ -143,54 +156,100 @@ def build_preprocessing_pipeline():
     categorical_cols = get_categorical_columns()
     numerical_cols = get_numerical_columns()
 
+    if feature_engineering_mode is None:
+        feature_engineering_mode = os.getenv("FEATURE_ENGINEERING_MODE", "chi2")
+    if target_dim is None:
+        target_dim_raw = os.getenv("TARGET_FEATURE_DIM", "13")
+        try:
+            target_dim = int(target_dim_raw)
+        except ValueError:
+            print("Invalid TARGET_FEATURE_DIM, defaulting to 13")
+            target_dim = 13
+
+    if target_dim <= 0:
+        print("Invalid TARGET_FEATURE_DIM, defaulting to 13")
+        target_dim = 13
+
+    feature_engineering_mode = feature_engineering_mode.lower()
+
     stages = []
 
-    # ========================================
-    # ÉTAPE 1: Encoder les colonnes catégorielles
-    # ========================================
+    # Step 1: Encode categorical columns
     indexed_cols = []
-
     for cat_col in categorical_cols:
-        # StringIndexer convertit les strings en indices (0, 1, 2, ...)
         indexer = StringIndexer(
             inputCol=cat_col,
             outputCol=f"{cat_col}_indexed",
-            handleInvalid="keep"  # Garder les valeurs inconnues
+            handleInvalid="keep"
         )
         stages.append(indexer)
         indexed_cols.append(f"{cat_col}_indexed")
 
-    # ========================================
-    # ÉTAPE 2: Assembler toutes les features
-    # ========================================
-    # Combiner colonnes numériques + catégorielles encodées
+    # Step 2: Assemble features
     all_feature_cols = numerical_cols + indexed_cols
+    feature_count = len(all_feature_cols)
+    if feature_count < target_dim:
+        raise ValueError(
+            f"Not enough features for selection (have {feature_count}, need {target_dim})"
+        )
+    selected_dim = target_dim
+
+    if selected_dim <= 0:
+        raise ValueError("No features available for selection. Check input schema.")
 
     assembler = VectorAssembler(
         inputCols=all_feature_cols,
         outputCol="features_raw",
-        handleInvalid="skip"  # Ignorer les lignes avec valeurs invalides
+        handleInvalid="skip"
     )
     stages.append(assembler)
 
-    # ========================================
-    # ÉTAPE 3: Normalisation (StandardScaler)
-    # ========================================
+    # Step 3: Feature selection (Spark ML)
+    if feature_engineering_mode == "chi2":
+        selector = ChiSqSelector(
+            numTopFeatures=selected_dim,
+            featuresCol="features_raw",
+            outputCol="features_selected",
+            labelCol="label",
+        )
+        selection_method = "ChiSqSelector"
+    elif feature_engineering_mode in ("slice", "slicer", "deterministic", "none"):
+        selector = VectorSlicer(
+            inputCol="features_raw",
+            outputCol="features_selected",
+            indices=list(range(selected_dim)),
+        )
+        selection_method = "VectorSlicer"
+    else:
+        print(
+            f"Unknown FEATURE_ENGINEERING_MODE '{feature_engineering_mode}', "
+            "using 'slice'"
+        )
+        selector = VectorSlicer(
+            inputCol="features_raw",
+            outputCol="features_selected",
+            indices=list(range(selected_dim)),
+        )
+        selection_method = "VectorSlicer"
+
+    stages.append(selector)
+
+    # Step 4: Scaling
     scaler = StandardScaler(
-        inputCol="features_raw",
+        inputCol="features_selected",
         outputCol="features",
-        withMean=True,   # Centrer à mean=0
-        withStd=True     # Normaliser à std=1
+        withMean=True,
+        withStd=True,
     )
     stages.append(scaler)
 
-    # Créer le pipeline
     pipeline = Pipeline(stages=stages)
 
-    print(f"✓ Pipeline créé avec {len(stages)} étapes:")
-    print(f"  - {len(categorical_cols)} colonnes catégorielles encodées")
-    print(f"  - {len(all_feature_cols)} features assemblées")
-    print(f"  - Normalisation StandardScaler appliquée")
+    print(f"Pipeline created with {len(stages)} stages:")
+    print(f"  - {len(categorical_cols)} categorical columns indexed")
+    print(f"  - {len(all_feature_cols)} features assembled")
+    print(f"  - Selection: {selection_method} -> {selected_dim} features")
+    print("  - StandardScaler normalization applied")
 
     return pipeline
 
@@ -241,9 +300,15 @@ def preprocess_data(df, pipeline_model=None):
     # ÉTAPE 3: Appliquer le pipeline
     # ========================================
     if pipeline_model is None:
+        feature_engineering_mode = os.getenv("FEATURE_ENGINEERING_MODE", "chi2")
+        if target_col not in df_clean.columns and feature_engineering_mode.lower() == "chi2":
+            print("Target column missing; falling back to deterministic selection")
+            feature_engineering_mode = "slice"
         # Créer et fiter un nouveau pipeline
         print(" Création d'un nouveau pipeline...")
-        pipeline = build_preprocessing_pipeline()
+        pipeline = build_preprocessing_pipeline(
+            feature_engineering_mode=feature_engineering_mode
+        )
         pipeline_model = pipeline.fit(df_clean)
         print("✓ Pipeline fité sur les données")
     else:
@@ -315,20 +380,21 @@ def preprocess_streaming_batch(df, pipeline_model):
 
 def get_feature_dimension():
     """
-    Retourne la dimension finale du vecteur de features après prétraitement.
+    Retourne la dimension finale du vecteur de features apres pretraitement.
 
     Returns:
-        int: Nombre de features (doit être 13 pour le modèle PyTorch)
+        int: Nombre de features (doit etre 13 pour le modele PyTorch)
     """
-    # 9 numériques + 11 catégorielles encodées = 20 features
-    # MAIS le modèle actuel attend 13 features
-    # On doit donc sélectionner les 13 features les plus importantes
+    target_dim_raw = os.getenv("TARGET_FEATURE_DIM", "13")
+    try:
+        target_dim = int(target_dim_raw)
+    except ValueError:
+        target_dim = 13
 
-    # IMPORTANT: Cette fonction est un placeholder
-    # La vraie dimension dépend de l'encodage des catégorielles
-    # Pour l'instant, on vise 13 features comme requis par le modèle
+    if target_dim <= 0:
+        target_dim = 13
 
-    return 13  # Dimension cible pour le modèle PyTorch
+    return target_dim
 
 
 def select_top_features(df, n_features=13):
