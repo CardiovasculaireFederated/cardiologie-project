@@ -1,6 +1,4 @@
 # server/kafka_server.py
-
-# 
 import flwr as fl
 import torch
 import json

@@ -29,9 +29,9 @@ def get_best_model_weights():
     cur = conn.cursor()
 
     cur.execute("""
-        SELECT model_name, weights, accuracy
+        SELECT model_name, weights, global_accuracy
         FROM models_info
-        ORDER BY accuracy DESC
+        ORDER BY global_accuracy DESC
         LIMIT 1;
     """)
     
