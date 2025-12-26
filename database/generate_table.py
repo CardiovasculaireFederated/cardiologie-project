@@ -11,7 +11,7 @@ def init_db():
     cur = conn.cursor()
     # Table 1 : Informations sur les PDFs
     cur.execute("""
-    CREATE TABLE IF NOT EXISTS pdf_info (
+    CREATE TABLE IF NOT EXISTS models_info (
         id SERIAL PRIMARY KEY,
         model_name VARCHAR(255),
         weights BYTEA,                     -- POIDS MOYENNÉS

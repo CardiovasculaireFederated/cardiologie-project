@@ -4,14 +4,24 @@ import torch  # si tu utilises PyTorch
 from datetime import datetime
 import psycopg2
 import pickle
+import os
+
+# def get_connection():
+#     return psycopg2.connect(
+#         host="localhost",
+#         port="5432",
+#         database="database_card",
+#         user="admin",
+#         password="cardio111"
+#     )
 
 def get_connection():
     return psycopg2.connect(
-        host="localhost",
-        port="5432",
-        database="database_card",
-        user="admin",
-        password="cardio111"
+        host=os.getenv("POSTGRES_HOST", "postgres_db"),
+        port=os.getenv("POSTGRES_PORT", "5432"),
+        database=os.getenv("POSTGRES_DB", "database_card"),
+        user=os.getenv("POSTGRES_USER", "admin"),
+        password=os.getenv("POSTGRES_PASSWORD", "cardio111")
     )
 
 def get_best_model_weights():
