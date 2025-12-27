@@ -13,7 +13,7 @@ from kafka import KafkaProducer, KafkaConsumer
 
 # Importations locales (assurez-vous que ces fichiers existent)
 from strategy import CardioStrategy, get_weighted_average_fn
-from data_base import get_best_model_weights
+from data_base import get_best_model_weights, init_db
 from common.kafka_topics import CLIENT_WEIGHTS_TOPIC, GLOBAL_MODEL_TOPIC
 from common.serialization import decode_kafka_message, encode_kafka_message
 
@@ -84,6 +84,7 @@ def listen_client_updates(consumer):
 def main():
     # 1. Initialisation
     try:
+        init_db()
         global_model_data = init_global_model()
     except Exception as e:
         logger.error(f"Erreur initialisation modèle : {e}")

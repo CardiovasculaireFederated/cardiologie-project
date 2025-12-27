@@ -1,8 +1,8 @@
 import psycopg2
 import io
+import logging
 import torch  # si tu utilises PyTorch
 from datetime import datetime
-import psycopg2
 import pickle
 import os
 
@@ -23,6 +23,34 @@ def get_connection():
         user=os.getenv("POSTGRES_USER", "admin"),
         password=os.getenv("POSTGRES_PASSWORD", "cardio111")
     )
+
+logger = logging.getLogger("database")
+
+def init_db() -> None:
+    conn = None
+    cur = None
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS models_info (
+                id SERIAL PRIMARY KEY,
+                model_name VARCHAR(255),
+                weights BYTEA,
+                global_accuracy FLOAT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+        conn.commit()
+        logger.info("Database schema ensured.")
+    except Exception as exc:
+        logger.error(f"Database init failed: {exc}")
+        raise
+    finally:
+        if cur is not None:
+            cur.close()
+        if conn is not None:
+            conn.close()
 
 def get_best_model_weights():
     conn=get_connection()
