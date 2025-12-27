@@ -31,7 +31,7 @@ if st.button("Lancer l'entraînement"):
         # Remarque : vous pouvez aussi importer votre classe Client et la lancer ici
         try:
             # Exemple : lancement du script client existant
-            process = subprocess.Popen(["python", "client.py"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            process = subprocess.Popen(["python", "client.main"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             
             # Affichage des logs en temps réel dans Streamlit
             st.text_area("Logs du client :", value="Entraînement en cours...", height=200)
