@@ -11,4 +11,4 @@ COPY client/ /app/client/
 
 ENV PYTHONPATH=/app
 
-CMD ["python", "/app/server/kafka_server.py"]
+CMD ["python", "-m", "server.kafka_server"]

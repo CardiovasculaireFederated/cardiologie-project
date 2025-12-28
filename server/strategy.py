@@ -1,8 +1,8 @@
 import flwr as fl
 from typing import List, Tuple, Dict, Optional
 from flwr.common import Metrics
-from evaluation import evaluate_global_model
-from data_base import save_global_model
+from .evaluation import evaluate_global_model
+from .data_base import save_global_model
 
 var=0
 class CardioStrategy(fl.server.strategy.FedAvg):
