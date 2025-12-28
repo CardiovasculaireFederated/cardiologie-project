@@ -108,6 +108,7 @@ services:
     environment:
       CLIENT_ID: "client_1"
       KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      CLIENT_KAFKA_AUTO_OFFSET_RESET: "latest"
       FL_SERVER_URL: "http://server:8000"
     depends_on:
       kafka:
@@ -128,6 +129,7 @@ services:
     environment:
       CLIENT_ID: "client_2"
       KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      CLIENT_KAFKA_AUTO_OFFSET_RESET: "latest"
       FL_SERVER_URL: "http://server:8000"
     depends_on:
       kafka:

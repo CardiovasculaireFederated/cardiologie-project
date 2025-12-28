@@ -10,6 +10,7 @@ from .data_validator import DataValidatorAgent
 from .model import HeartDiseaseModel
 from .scout_agent import ScoutAgent
 from .trainer import train_model
+from .model_evaluator import ModelEvaluatorAgent
 from common.kafka_topics import CLIENT_WEIGHTS_TOPIC, GLOBAL_MODEL_TOPIC
 from common.serialization import decode_kafka_message, encode_kafka_message
 
@@ -36,6 +37,7 @@ class ManagerAgent:
         self.model = HeartDiseaseModel()
         self.validator = DataValidatorAgent(min_samples=100)
         self.scout = ScoutAgent(base_epochs=self.base_epochs)
+        self.evaluator = ModelEvaluatorAgent()
 
         self.train_loader, self.val_loader, self.test_loader = load_data(
             file_path=self.data_path,
@@ -45,11 +47,28 @@ class ManagerAgent:
         kafka_servers = parse_bootstrap_servers(
             os.getenv("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
         )
+        auto_offset_reset = os.getenv("CLIENT_KAFKA_AUTO_OFFSET_RESET", "earliest")
+        group_id_raw = os.getenv("CLIENT_KAFKA_GROUP_ID", self.client_id).strip()
+        group_id = group_id_raw if group_id_raw else None
+        self.group_id = group_id
+        max_poll_interval_ms = int(
+            os.getenv("CLIENT_KAFKA_MAX_POLL_INTERVAL_MS", "7200000")
+        )
+        session_timeout_ms = int(
+            os.getenv("CLIENT_KAFKA_SESSION_TIMEOUT_MS", "30000")
+        )
+        heartbeat_interval_ms = int(
+            os.getenv("CLIENT_KAFKA_HEARTBEAT_INTERVAL_MS", "10000")
+        )
         self.consumer = KafkaConsumer(
             GLOBAL_MODEL_TOPIC,
             bootstrap_servers=kafka_servers,
-            auto_offset_reset="latest",
-            enable_auto_commit=True,
+            auto_offset_reset=auto_offset_reset,
+            enable_auto_commit=False,
+            group_id=group_id,
+            max_poll_interval_ms=max_poll_interval_ms,
+            session_timeout_ms=session_timeout_ms,
+            heartbeat_interval_ms=heartbeat_interval_ms,
             value_deserializer=lambda v: v,
         )
 
@@ -132,6 +151,16 @@ class ManagerAgent:
             }
         )
 
+        eval_metrics: Dict[str, Any] = {}
+        try:
+            eval_metrics = self.evaluator.evaluate(
+                model=self.model,
+                data_loader=self.test_loader,
+                device=self.device,
+            )
+        except Exception as exc:
+            logger.error(f"ModelEvaluator failed: {exc}")
+
         metadata = {
             "client_id": self.client_id,
             "round_id": self.round_id,
@@ -141,6 +170,7 @@ class ManagerAgent:
             "val_size": len(self.val_loader.dataset),
             "best_val_acc": result.get("best_val_acc") or 0.0,
             "data_validation": validation_report,
+            "evaluation": eval_metrics,
         }
 
         local_weights = result["weights"]
@@ -148,6 +178,12 @@ class ManagerAgent:
         self.producer.send(CLIENT_WEIGHTS_TOPIC, value=kafka_message)
         self.producer.flush()
         logger.info(f"Round {self.round_id} sent to Kafka by {self.client_id}")
+
+        if self.group_id is not None:
+            try:
+                self.consumer.commit()
+            except Exception as exc:
+                logger.warning(f"Kafka commit failed: {exc}")
 
     def _send_skip_update(self, validation_report: Dict[str, Any], reason: str) -> None:
         metadata = {

@@ -39,33 +39,46 @@ st.header("2. Entraînement Fédéré")
 if "training_pid" not in st.session_state:
     st.session_state.training_pid = None
 
+
+def is_process_running(pid: int | None) -> bool:
+    if not pid:
+        return False
+    return os.path.exists(f"/proc/{pid}")
+
 if st.button("معالجة وبدء التدريب"):
     if os.path.exists(DATA_PATH):
-        st.info("Connexion au serveur et démarrage de l'entraînement...")
-        try:
-            os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
-            log_handle = open(LOG_PATH, "a", buffering=1)
+        if is_process_running(st.session_state.training_pid):
+            st.warning("Entraînement déjà en cours.")
+        else:
+            st.info("Connexion au serveur et démarrage de l'entraînement...")
+            try:
+                os.makedirs(os.path.dirname(LOG_PATH), exist_ok=True)
+                log_handle = open(LOG_PATH, "a", buffering=1)
 
-            env = os.environ.copy()
-            env["CLIENT_DATA_PATH"] = DATA_PATH
-            env.setdefault("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
+                env = os.environ.copy()
+                env["CLIENT_DATA_PATH"] = DATA_PATH
+                env.setdefault("KAFKA_BOOTSTRAP_SERVERS", "kafka:9092")
+                env.setdefault("CLIENT_KAFKA_GROUP_ID", env.get("CLIENT_ID", "client_1"))
 
-            process = subprocess.Popen(
-                ["python", "-m", "client.main"],
-                stdout=log_handle,
-                stderr=log_handle,
-                text=True,
-                env=env,
-            )
-            st.session_state.training_pid = process.pid
-            st.success(f"Entraînement lancé (PID {process.pid}).")
-        except Exception as e:
-            st.error(f"Erreur : {e}")
+                process = subprocess.Popen(
+                    ["python", "-m", "client.main"],
+                    stdout=log_handle,
+                    stderr=log_handle,
+                    text=True,
+                    env=env,
+                )
+                st.session_state.training_pid = process.pid
+                st.success(f"Entraînement lancé (PID {process.pid}).")
+            except Exception as e:
+                st.error(f"Erreur : {e}")
     else:
         st.warning("Veuillez d'abord uploader un fichier CSV.")
 
 if st.session_state.training_pid:
-    st.caption(f"PID actuel: {st.session_state.training_pid}")
+    if is_process_running(st.session_state.training_pid):
+        st.caption(f"PID actuel: {st.session_state.training_pid}")
+    else:
+        st.session_state.training_pid = None
 
 logs = tail_file(LOG_PATH, max_lines=200)
 if logs:
