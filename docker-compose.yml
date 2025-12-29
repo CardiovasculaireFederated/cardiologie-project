@@ -104,11 +104,17 @@ services:
       dockerfile: client/Dockerfile
     ports:
       - "8501:8501"
+      - "9101:9101"
     container_name: fl_client_1
     environment:
       CLIENT_ID: "client_1"
       KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
       CLIENT_KAFKA_AUTO_OFFSET_RESET: "latest"
+      CLIENT_KAFKA_GROUP_ID: ""
+      CLIENT_RAW_DATA_PATH: "data/raw.csv"
+      CLIENT_DATA_PATH: "data/processed/train.csv"
+      CLIENT_LOG_PATH: "logs/client_training.log"
+      CLIENT_METRICS_PORT: "9101"
       FL_SERVER_URL: "http://server:8000"
     depends_on:
       kafka:
@@ -116,7 +122,34 @@ services:
     networks:
       - fl_network
     volumes:
-      - ./data:/app/data
+      - ./data/hospital_1:/app/data
+      - ./logs/hospital_1:/app/logs
+    restart: unless-stopped
+
+  client_1_worker:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: fl_client_1_worker
+    command: ["python", "-m", "client.main"]
+    environment:
+      CLIENT_ID: "client_1"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      CLIENT_KAFKA_AUTO_OFFSET_RESET: "latest"
+      CLIENT_KAFKA_GROUP_ID: ""
+      CLIENT_DATA_FORMAT: "processed"
+      CLIENT_DATA_PATH: "data/processed/train.csv"
+      CLIENT_LOG_PATH: "logs/client_training.log"
+      CLIENT_METRICS_PORT: "9101"
+      CLIENT_MIN_SAMPLES: "10"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - fl_network
+    volumes:
+      - ./data/hospital_1:/app/data
+      - ./logs/hospital_1:/app/logs
     restart: unless-stopped
 
   client_2:
@@ -125,11 +158,17 @@ services:
       dockerfile: client/Dockerfile
     ports:
       - "8502:8501"
+      - "9102:9102"
     container_name: fl_client_2
     environment:
       CLIENT_ID: "client_2"
       KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
       CLIENT_KAFKA_AUTO_OFFSET_RESET: "latest"
+      CLIENT_KAFKA_GROUP_ID: ""
+      CLIENT_RAW_DATA_PATH: "data/raw.csv"
+      CLIENT_DATA_PATH: "data/processed/train.csv"
+      CLIENT_LOG_PATH: "logs/client_training.log"
+      CLIENT_METRICS_PORT: "9102"
       FL_SERVER_URL: "http://server:8000"
     depends_on:
       kafka:
@@ -137,7 +176,34 @@ services:
     networks:
       - fl_network
     volumes:
-      - ./data:/app/data
+      - ./data/hospital_2:/app/data
+      - ./logs/hospital_2:/app/logs
+    restart: unless-stopped
+
+  client_2_worker:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    container_name: fl_client_2_worker
+    command: ["python", "-m", "client.main"]
+    environment:
+      CLIENT_ID: "client_2"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9092"
+      CLIENT_KAFKA_AUTO_OFFSET_RESET: "latest"
+      CLIENT_KAFKA_GROUP_ID: ""
+      CLIENT_DATA_FORMAT: "processed"
+      CLIENT_DATA_PATH: "data/processed/train.csv"
+      CLIENT_LOG_PATH: "logs/client_training.log"
+      CLIENT_METRICS_PORT: "9102"
+      CLIENT_MIN_SAMPLES: "10"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    networks:
+      - fl_network
+    volumes:
+      - ./data/hospital_2:/app/data
+      - ./logs/hospital_2:/app/logs
     restart: unless-stopped
 
   # ============================================
@@ -156,6 +222,10 @@ services:
       POSTGRES_DB: "database_card"
       POSTGRES_USER: "admin"
       POSTGRES_PASSWORD: "cardio111"
+      TRAINING_POLL_INTERVAL_SEC: "5"
+      AGGREGATION_WAIT_SEC: "30"
+      MODEL_ACCEPT_DELTA: "0.00"
+      KAFKA_SERVER_METRICS_PORT: "9200"
     depends_on:
       kafka:
         condition: service_healthy

@@ -1,0 +1,627 @@
+2025-12-28 01:53:05,797 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:05,801 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 01:53:05,801 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:05,802 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 01:53:05,804 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:05,807 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 01:53:05,807 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:05,810 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:05,814 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 01:53:05,814 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:05,815 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 01:53:05,816 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 01:53:05,835 WARNING:kafka.cluster:Topic client_events is not available during auto-create initialization
+2025-12-28 01:53:05,836 WARNING:kafka.cluster:Topic global_model is not available during auto-create initialization
+2025-12-28 01:53:05,838 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:05,840 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:05,841 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:05,841 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:05,842 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 01:53:05,847 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 01:53:06,780 INFO:kafka.cluster:Coordinator for group/client_2 is BrokerMetadata(nodeId='coordinator-1', host='kafka', port=9092, rack=None)
+2025-12-28 01:53:06,780 INFO:kafka.coordinator:Discovered coordinator coordinator-1 for group client_2
+2025-12-28 01:53:06,781 INFO:kafka.coordinator.heartbeat:Starting new heartbeat thread
+2025-12-28 01:53:06,781 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2
+2025-12-28 01:53:06,782 INFO:kafka.coordinator:Failed to join group client_2: NodeNotReadyError: coordinator-1
+2025-12-28 01:53:06,783 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:06,784 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:06,793 INFO:kafka.cluster:Coordinator for group/client_2-events is BrokerMetadata(nodeId='coordinator-1', host='kafka', port=9092, rack=None)
+2025-12-28 01:53:06,793 INFO:kafka.coordinator:Discovered coordinator coordinator-1 for group client_2-events
+2025-12-28 01:53:06,794 INFO:kafka.coordinator.heartbeat:Starting new heartbeat thread
+2025-12-28 01:53:06,794 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2-events
+2025-12-28 01:53:06,794 INFO:kafka.coordinator:Failed to join group client_2-events: NodeNotReadyError: coordinator-1
+2025-12-28 01:53:06,796 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:06,796 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:06,884 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 01:53:06,896 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-036cd047-d823-4e0a-ac93-c524487964dc for group client_2; will retry join-group
+2025-12-28 01:53:06,897 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:53:06,897 INFO:kafka.coordinator:Failed to join group client_2: [Error 79] MemberIdRequiredError
+2025-12-28 01:53:06,898 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 01:53:06,908 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-f9a87e10-67a8-44b8-abf9-ce743d39d134 for group client_2-events; will retry join-group
+2025-12-28 01:53:06,909 INFO:kafka.coordinator:Failed to join group client_2-events: [Error 79] MemberIdRequiredError
+2025-12-28 01:53:06,910 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:53:09,926 INFO:kafka.coordinator:Successfully joined group client_2 <Generation 1 (member_id: kafka-python-2.3.0-036cd047-d823-4e0a-ac93-c524487964dc, protocol: range)>
+2025-12-28 01:53:09,927 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:53:09,927 WARNING:kafka.coordinator.assignors.range:No partition metadata for topic global_model
+2025-12-28 01:53:09,930 INFO:kafka.coordinator:Successfully joined group client_2-events <Generation 1 (member_id: kafka-python-2.3.0-f9a87e10-67a8-44b8-abf9-ce743d39d134, protocol: range)>
+2025-12-28 01:53:09,931 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:53:09,931 WARNING:kafka.coordinator.assignors.range:No partition metadata for topic client_events
+2025-12-28 01:53:09,996 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 01:53:09,996 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 01:53:09,996 INFO:kafka.coordinator.consumer:Setting newly assigned partitions set() for group client_2-events
+2025-12-28 01:53:09,997 INFO:kafka.coordinator.consumer:Setting newly assigned partitions set() for group client_2
+2025-12-28 01:53:03,833 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2-events
+2025-12-28 01:53:03,834 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:53:03,839 INFO:kafka.coordinator:Successfully joined group client_2-events <Generation 2 (member_id: kafka-python-2.3.0-f9a87e10-67a8-44b8-abf9-ce743d39d134, protocol: range)>
+2025-12-28 01:53:03,840 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:53:03,847 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 01:53:03,848 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:53:03,868 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 01:53:15,585 WARNING:kafka.coordinator.heartbeat:Heartbeat session expired, marking coordinator dead
+2025-12-28 01:53:15,587 WARNING:kafka.coordinator:Marking the coordinator dead (node coordinator-1) for group client_2-events: Heartbeat session expired.
+2025-12-28 01:53:15,591 INFO:kafka.cluster:Coordinator for group/client_2-events is BrokerMetadata(nodeId='coordinator-1', host='kafka', port=9092, rack=None)
+2025-12-28 01:53:15,591 INFO:kafka.coordinator:Discovered coordinator coordinator-1 for group client_2-events
+2025-12-28 01:53:20,005 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2
+2025-12-28 01:53:20,006 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 01:53:20,009 INFO:kafka.coordinator:Successfully joined group client_2 <Generation 2 (member_id: kafka-python-2.3.0-036cd047-d823-4e0a-ac93-c524487964dc, protocol: range)>
+2025-12-28 01:53:20,010 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:53:20,014 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 01:53:20,015 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='global_model', partition=0)} for group client_2
+2025-12-28 01:53:20,018 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 01:53:46,565 INFO:manager_agent:Received global model from Kafka
+2025-12-28 01:53:46,565 INFO:manager_agent:Starting training for round 1
+2025-12-28 01:53:47,763 INFO:scout_agent:ScoutAgent: lr=0.0001 -> val_acc=0.6286
+2025-12-28 01:53:47,778 INFO:scout_agent:ScoutAgent: lr=0.0003 -> val_acc=0.6286
+2025-12-28 01:53:47,795 INFO:scout_agent:ScoutAgent: lr=0.001 -> val_acc=0.6286
+2025-12-28 01:53:47,813 INFO:scout_agent:ScoutAgent: lr=0.003 -> val_acc=0.6286
+2025-12-28 01:53:47,831 INFO:scout_agent:ScoutAgent: lr=0.01 -> val_acc=0.6286
+2025-12-28 01:53:47,832 INFO:manager_agent:Using hyperparameters: epochs=5, lr=0.0001
+2025-12-28 01:53:48,184 INFO:client.trainer:Epoch 1/5 | TrainLoss=0.5418 Acc=0.7889 | ValLoss=0.5166 Acc=0.7963
+2025-12-28 01:53:48,569 INFO:client.trainer:Epoch 2/5 | TrainLoss=0.5361 Acc=0.7885 | ValLoss=0.5165 Acc=0.7963
+2025-12-28 01:53:48,570 WARNING:sentinel_agent:Sentinel: no improvement (1/3)
+2025-12-28 01:53:48,761 WARNING:kafka.coordinator.heartbeat:Heartbeat: local member_id was not recognized; this consumer needs to re-join
+2025-12-28 01:53:48,763 INFO:kafka.coordinator.consumer:Failing OffsetCommit request since the consumer is not part of an active group
+2025-12-28 01:53:48,766 ERROR:kafka.coordinator.consumer:Offset commit failed: This is likely to cause duplicate message delivery
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 594, in _maybe_auto_commit_offsets_sync
+    self.commit_offsets_sync(self._subscription.all_consumed_offsets(), timeout_ms=timeout_ms)
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 582, in commit_offsets_sync
+    raise future.exception # pylint: disable-msg=raising-bad-type
+kafka.errors.CommitFailedError: CommitFailedError: Offset commit cannot be completed since the consumer is not part of an active group for auto partition assignment; it is likely that the consumer was kicked out of the group.
+2025-12-28 01:53:48,768 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:53:48,769 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:53:48,772 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-34f71bba-b7f4-448b-ba28-84cbf63cac02 for group client_2-events; will retry join-group
+2025-12-28 01:53:48,773 INFO:kafka.coordinator:Failed to join group client_2-events: [Error 79] MemberIdRequiredError
+2025-12-28 01:53:48,773 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:53:48,987 INFO:client.trainer:Epoch 3/5 | TrainLoss=0.5331 Acc=0.7901 | ValLoss=0.5143 Acc=0.7963
+2025-12-28 01:53:48,987 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5166 → 0.5143)
+2025-12-28 01:53:49,313 INFO:client.trainer:Epoch 4/5 | TrainLoss=0.5319 Acc=0.7938 | ValLoss=0.5149 Acc=0.7963
+2025-12-28 01:53:49,313 WARNING:sentinel_agent:Sentinel: no improvement (1/3)
+2025-12-28 01:53:49,603 INFO:client.trainer:Epoch 5/5 | TrainLoss=0.5341 Acc=0.7915 | ValLoss=0.5115 Acc=0.7963
+2025-12-28 01:53:49,603 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5143 → 0.5115)
+2025-12-28 01:53:49,622 INFO:model_evaluator:ModelEvaluator: accuracy=0.7970
+2025-12-28 01:53:49,625 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 01:53:49,626 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 01:53:49,626 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 01:53:49,634 INFO:manager_agent:Round 1 sent to Kafka by client_2
+2025-12-28 01:53:51,768 INFO:kafka.coordinator:Successfully joined group client_2-events <Generation 4 (member_id: kafka-python-2.3.0-34f71bba-b7f4-448b-ba28-84cbf63cac02, protocol: range)>
+2025-12-28 01:53:51,768 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:53:51,771 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 01:53:51,772 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:54:20,930 WARNING:kafka.coordinator.heartbeat:Heartbeat session expired, marking coordinator dead
+2025-12-28 01:54:20,931 WARNING:kafka.coordinator:Marking the coordinator dead (node coordinator-1) for group client_2-events: Heartbeat session expired.
+2025-12-28 01:54:20,977 INFO:kafka.cluster:Coordinator for group/client_2-events is BrokerMetadata(nodeId='coordinator-1', host='kafka', port=9092, rack=None)
+2025-12-28 01:54:20,977 INFO:kafka.coordinator:Discovered coordinator coordinator-1 for group client_2-events
+2025-12-28 01:54:29,981 WARNING:kafka.coordinator.heartbeat:Heartbeat: local member_id was not recognized; this consumer needs to re-join
+2025-12-28 01:54:29,982 INFO:kafka.coordinator.consumer:Failing OffsetCommit request since the consumer is not part of an active group
+2025-12-28 01:54:29,982 ERROR:kafka.coordinator.consumer:Offset commit failed: This is likely to cause duplicate message delivery
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 594, in _maybe_auto_commit_offsets_sync
+    self.commit_offsets_sync(self._subscription.all_consumed_offsets(), timeout_ms=timeout_ms)
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 582, in commit_offsets_sync
+    raise future.exception # pylint: disable-msg=raising-bad-type
+kafka.errors.CommitFailedError: CommitFailedError: Offset commit cannot be completed since the consumer is not part of an active group for auto partition assignment; it is likely that the consumer was kicked out of the group.
+2025-12-28 01:54:29,982 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:54:29,983 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:54:29,984 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-667f206a-d9ed-426b-8079-170c106c5767 for group client_2-events; will retry join-group
+2025-12-28 01:54:29,985 INFO:kafka.coordinator:Failed to join group client_2-events: [Error 79] MemberIdRequiredError
+2025-12-28 01:54:29,985 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:54:32,997 INFO:kafka.coordinator:Successfully joined group client_2-events <Generation 6 (member_id: kafka-python-2.3.0-667f206a-d9ed-426b-8079-170c106c5767, protocol: range)>
+2025-12-28 01:54:32,998 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:54:33,001 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 01:54:33,001 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:55:18,675 WARNING:kafka.coordinator.heartbeat:Heartbeat: local member_id was not recognized; this consumer needs to re-join
+2025-12-28 01:55:18,676 INFO:kafka.coordinator.consumer:Failing OffsetCommit request since the consumer is not part of an active group
+2025-12-28 01:55:18,676 ERROR:kafka.coordinator.consumer:Offset commit failed: This is likely to cause duplicate message delivery
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 594, in _maybe_auto_commit_offsets_sync
+    self.commit_offsets_sync(self._subscription.all_consumed_offsets(), timeout_ms=timeout_ms)
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 582, in commit_offsets_sync
+    raise future.exception # pylint: disable-msg=raising-bad-type
+kafka.errors.CommitFailedError: CommitFailedError: Offset commit cannot be completed since the consumer is not part of an active group for auto partition assignment; it is likely that the consumer was kicked out of the group.
+2025-12-28 01:55:18,677 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:55:18,677 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:55:18,678 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-49a41fd2-96f5-46b5-adc9-970c13cebb0f for group client_2-events; will retry join-group
+2025-12-28 01:55:18,679 INFO:kafka.coordinator:Failed to join group client_2-events: [Error 79] MemberIdRequiredError
+2025-12-28 01:55:18,679 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:55:22,093 INFO:kafka.coordinator:Successfully joined group client_2-events <Generation 8 (member_id: kafka-python-2.3.0-49a41fd2-96f5-46b5-adc9-970c13cebb0f, protocol: range)>
+2025-12-28 01:55:22,093 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:55:22,096 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 01:55:22,096 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:55:35,684 WARNING:kafka.coordinator.heartbeat:Heartbeat session expired, marking coordinator dead
+2025-12-28 01:55:35,685 WARNING:kafka.coordinator:Marking the coordinator dead (node coordinator-1) for group client_2-events: Heartbeat session expired.
+2025-12-28 01:55:35,686 INFO:kafka.cluster:Coordinator for group/client_2-events is BrokerMetadata(nodeId='coordinator-1', host='kafka', port=9092, rack=None)
+2025-12-28 01:55:35,686 INFO:kafka.coordinator:Discovered coordinator coordinator-1 for group client_2-events
+2025-12-28 01:55:56,121 WARNING:kafka.coordinator.consumer:OffsetCommit for group client_2-events failed: [Error 25] UnknownMemberIdError: client_2-events
+2025-12-28 01:55:56,122 INFO:kafka.coordinator.consumer:Failing OffsetCommit request since the consumer is not part of an active group
+2025-12-28 01:55:56,122 ERROR:kafka.coordinator.consumer:Offset commit failed: This is likely to cause duplicate message delivery
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 594, in _maybe_auto_commit_offsets_sync
+    self.commit_offsets_sync(self._subscription.all_consumed_offsets(), timeout_ms=timeout_ms)
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 582, in commit_offsets_sync
+    raise future.exception # pylint: disable-msg=raising-bad-type
+kafka.errors.CommitFailedError: CommitFailedError: Offset commit cannot be completed since the consumer is not part of an active group for auto partition assignment; it is likely that the consumer was kicked out of the group.
+2025-12-28 01:55:56,123 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:55:56,123 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:55:56,125 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-66c54125-4361-4e80-82d9-662c1e0042b9 for group client_2-events; will retry join-group
+2025-12-28 01:55:56,125 INFO:kafka.coordinator:Failed to join group client_2-events: [Error 79] MemberIdRequiredError
+2025-12-28 01:55:56,126 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:55:58,795 INFO:kafka.coordinator:Successfully joined group client_2-events <Generation 10 (member_id: kafka-python-2.3.0-66c54125-4361-4e80-82d9-662c1e0042b9, protocol: range)>
+2025-12-28 01:55:58,795 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:55:58,799 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 01:55:58,799 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:56:23,783 WARNING:kafka.coordinator.heartbeat:Heartbeat: local member_id was not recognized; this consumer needs to re-join
+2025-12-28 01:56:23,783 INFO:kafka.coordinator.consumer:Failing OffsetCommit request since the consumer is not part of an active group
+2025-12-28 01:56:23,784 ERROR:kafka.coordinator.consumer:Offset commit failed: This is likely to cause duplicate message delivery
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 594, in _maybe_auto_commit_offsets_sync
+    self.commit_offsets_sync(self._subscription.all_consumed_offsets(), timeout_ms=timeout_ms)
+  File "/usr/local/lib/python3.10/site-packages/kafka/coordinator/consumer.py", line 582, in commit_offsets_sync
+    raise future.exception # pylint: disable-msg=raising-bad-type
+kafka.errors.CommitFailedError: CommitFailedError: Offset commit cannot be completed since the consumer is not part of an active group for auto partition assignment; it is likely that the consumer was kicked out of the group.
+2025-12-28 01:56:23,784 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 01:56:23,785 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:56:23,786 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-67091e34-c545-4785-998f-2d94db970246 for group client_2-events; will retry join-group
+2025-12-28 01:56:23,787 INFO:kafka.coordinator:Failed to join group client_2-events: [Error 79] MemberIdRequiredError
+2025-12-28 01:56:23,787 INFO:kafka.coordinator:(Re-)joining group client_2-events
+2025-12-28 01:56:26,791 INFO:kafka.coordinator:Successfully joined group client_2-events <Generation 12 (member_id: kafka-python-2.3.0-67091e34-c545-4785-998f-2d94db970246, protocol: range)>
+2025-12-28 01:56:26,791 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 01:56:26,794 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 01:56:26,794 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='client_events', partition=0)} for group client_2-events
+2025-12-28 13:35:03,021 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:35:03,026 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:35:03,026 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:35:03,028 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 13:35:03,029 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:35:03,033 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:35:03,034 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:35:03,040 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:35:03,046 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:35:03,047 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:35:03,051 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 13:35:03,056 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 13:35:03,059 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 13:35:03,060 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:35:03,061 ERROR:kafka.cluster:Topic global_model not found in cluster metadata
+2025-12-28 13:35:03,064 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:35:03,065 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:35:03,066 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:35:04,119 INFO:kafka.cluster:Coordinator for group/client_2 is BrokerMetadata(nodeId='coordinator-1', host='kafka', port=9092, rack=None)
+2025-12-28 13:35:04,120 INFO:kafka.coordinator:Discovered coordinator coordinator-1 for group client_2
+2025-12-28 13:35:04,120 INFO:kafka.coordinator.heartbeat:Starting new heartbeat thread
+2025-12-28 13:35:04,120 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2
+2025-12-28 13:35:04,121 INFO:kafka.coordinator:Failed to join group client_2: NodeNotReadyError: coordinator-1
+2025-12-28 13:35:04,122 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:35:04,122 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:35:04,223 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:35:04,226 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-288e0a3e-1ad5-48fa-8e16-e57c42963f2f for group client_2; will retry join-group
+2025-12-28 13:35:04,226 INFO:kafka.coordinator:Failed to join group client_2: [Error 79] MemberIdRequiredError
+2025-12-28 13:35:04,227 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:35:07,229 INFO:kafka.coordinator:Successfully joined group client_2 <Generation 1 (member_id: kafka-python-2.3.0-288e0a3e-1ad5-48fa-8e16-e57c42963f2f, protocol: range)>
+2025-12-28 13:35:07,229 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 13:35:07,230 WARNING:kafka.coordinator.assignors.range:No partition metadata for topic global_model
+2025-12-28 13:35:07,297 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:35:07,310 INFO:kafka.coordinator.consumer:Setting newly assigned partitions set() for group client_2
+2025-12-28 13:35:17,314 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2
+2025-12-28 13:35:17,316 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:35:17,320 INFO:kafka.coordinator:Successfully joined group client_2 <Generation 2 (member_id: kafka-python-2.3.0-288e0a3e-1ad5-48fa-8e16-e57c42963f2f, protocol: range)>
+2025-12-28 13:35:17,321 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 13:35:17,327 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 13:35:17,329 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='global_model', partition=0)} for group client_2
+2025-12-28 13:35:17,336 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 13:36:12,979 INFO:manager_agent:Received global model from Kafka
+2025-12-28 13:36:12,979 INFO:manager_agent:Starting training for round 1
+2025-12-28 13:36:14,762 INFO:scout_agent:ScoutAgent: lr=0.0001 -> val_acc=0.6286
+2025-12-28 13:36:14,778 INFO:scout_agent:ScoutAgent: lr=0.0003 -> val_acc=0.6286
+2025-12-28 13:36:14,795 INFO:scout_agent:ScoutAgent: lr=0.001 -> val_acc=0.6286
+2025-12-28 13:36:14,810 INFO:scout_agent:ScoutAgent: lr=0.003 -> val_acc=0.6286
+2025-12-28 13:36:14,825 INFO:scout_agent:ScoutAgent: lr=0.01 -> val_acc=0.6286
+2025-12-28 13:36:14,826 INFO:manager_agent:Using hyperparameters: epochs=5, lr=0.0001
+2025-12-28 13:36:15,094 INFO:client.trainer:Epoch 1/5 | TrainLoss=0.5342 Acc=0.7873 | ValLoss=0.5187 Acc=0.7963
+2025-12-28 13:36:15,425 INFO:client.trainer:Epoch 2/5 | TrainLoss=0.5363 Acc=0.7893 | ValLoss=0.5174 Acc=0.7963
+2025-12-28 13:36:15,426 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5187 → 0.5174)
+2025-12-28 13:36:15,838 INFO:client.trainer:Epoch 3/5 | TrainLoss=0.5385 Acc=0.7901 | ValLoss=0.5155 Acc=0.7963
+2025-12-28 13:36:15,839 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5174 → 0.5155)
+2025-12-28 13:36:16,253 INFO:client.trainer:Epoch 4/5 | TrainLoss=0.5307 Acc=0.7903 | ValLoss=0.5132 Acc=0.7963
+2025-12-28 13:36:16,253 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5155 → 0.5132)
+2025-12-28 13:36:16,702 INFO:client.trainer:Epoch 5/5 | TrainLoss=0.5285 Acc=0.7922 | ValLoss=0.5136 Acc=0.7963
+2025-12-28 13:36:16,702 WARNING:sentinel_agent:Sentinel: no improvement (1/3)
+2025-12-28 13:36:16,729 INFO:model_evaluator:ModelEvaluator: accuracy=0.7970
+2025-12-28 13:36:16,734 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:36:16,734 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:36:16,735 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:36:16,744 INFO:manager_agent:Round 1 sent to Kafka by client_2
+2025-12-28 13:37:47,688 WARNING:kafka.coordinator.heartbeat:Heartbeat: local member_id was not recognized; this consumer needs to re-join
+2025-12-28 13:37:47,689 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions {TopicPartition(topic='global_model', partition=0)} for group client_2
+2025-12-28 13:37:47,689 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:37:47,691 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-0b5ee225-53fe-47c5-a7a6-4482a3ba90de for group client_2; will retry join-group
+2025-12-28 13:37:47,692 INFO:kafka.coordinator:Failed to join group client_2: [Error 79] MemberIdRequiredError
+2025-12-28 13:37:47,692 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:37:50,696 INFO:kafka.coordinator:Successfully joined group client_2 <Generation 4 (member_id: kafka-python-2.3.0-0b5ee225-53fe-47c5-a7a6-4482a3ba90de, protocol: range)>
+2025-12-28 13:37:50,696 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 13:37:50,699 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 13:37:50,700 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='global_model', partition=0)} for group client_2
+2025-12-28 13:40:03,064 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:40:03,065 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:40:03,065 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:40:03,067 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 13:40:03,068 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 13:41:22,671 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:41:22,676 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:41:22,677 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:41:22,681 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 13:41:22,683 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:41:22,686 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:41:22,687 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:41:22,691 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:41:22,699 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:41:22,700 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:41:22,701 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 13:41:22,703 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 13:41:22,704 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 13:41:22,705 ERROR:kafka.cluster:Topic global_model not found in cluster metadata
+2025-12-28 13:41:22,705 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:41:22,706 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:41:22,709 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:41:22,709 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:41:23,787 INFO:kafka.cluster:Coordinator for group/client_2 is BrokerMetadata(nodeId='coordinator-1', host='kafka', port=9092, rack=None)
+2025-12-28 13:41:23,788 INFO:kafka.coordinator:Discovered coordinator coordinator-1 for group client_2
+2025-12-28 13:41:23,788 INFO:kafka.coordinator.heartbeat:Starting new heartbeat thread
+2025-12-28 13:41:23,789 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2
+2025-12-28 13:41:23,790 INFO:kafka.coordinator:Failed to join group client_2: NodeNotReadyError: coordinator-1
+2025-12-28 13:41:23,791 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:41:23,792 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=coordinator-1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:41:23,893 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:41:23,914 INFO:kafka.coordinator:Received member id kafka-python-2.3.0-78fae06d-b170-4d65-9aae-c2f69e426548 for group client_2; will retry join-group
+2025-12-28 13:41:23,915 INFO:kafka.coordinator:Failed to join group client_2: [Error 79] MemberIdRequiredError
+2025-12-28 13:41:23,915 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:41:26,942 INFO:kafka.coordinator:Successfully joined group client_2 <Generation 1 (member_id: kafka-python-2.3.0-78fae06d-b170-4d65-9aae-c2f69e426548, protocol: range)>
+2025-12-28 13:41:26,942 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 13:41:26,946 WARNING:kafka.coordinator.assignors.range:No partition metadata for topic global_model
+2025-12-28 13:41:36,672 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:41:36,673 INFO:kafka.coordinator.consumer:Setting newly assigned partitions set() for group client_2
+2025-12-28 13:41:36,201 INFO:kafka.coordinator.consumer:Revoking previously assigned partitions set() for group client_2
+2025-12-28 13:41:36,202 INFO:kafka.coordinator:(Re-)joining group client_2
+2025-12-28 13:41:36,205 INFO:kafka.coordinator:Successfully joined group client_2 <Generation 2 (member_id: kafka-python-2.3.0-78fae06d-b170-4d65-9aae-c2f69e426548, protocol: range)>
+2025-12-28 13:41:36,205 INFO:kafka.coordinator:Elected group leader -- performing partition assignments using range
+2025-12-28 13:41:36,209 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 13:41:36,210 INFO:kafka.coordinator.consumer:Setting newly assigned partitions {TopicPartition(topic='global_model', partition=0)} for group client_2
+2025-12-28 13:41:36,222 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 13:44:53,707 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:44:53,713 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:44:53,713 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:44:53,715 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 13:44:53,717 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:44:53,721 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:44:53,722 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:44:53,726 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:44:53,730 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:44:53,731 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:44:53,732 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 13:44:53,733 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 13:44:53,736 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 13:44:53,736 ERROR:kafka.cluster:Topic global_model not found in cluster metadata
+2025-12-28 13:44:53,737 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:44:53,737 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:49:53,773 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:49:53,778 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:49:53,778 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:49:53,780 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 13:49:53,781 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:49:53,785 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:49:53,786 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:49:53,789 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:49:53,793 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:49:53,794 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:49:53,795 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 13:49:53,796 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 13:49:53,800 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 13:49:53,801 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 13:49:53,803 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:49:53,804 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:49:53,804 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:49:53,804 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:49:53,805 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:49:53,805 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:49:53,822 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 13:49:53,822 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 13:53:03,019 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:53:03,023 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:53:03,023 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:53:03,024 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 13:53:03,026 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:53:03,029 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:53:03,029 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:53:03,033 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:53:03,037 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 13:53:03,039 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:53:03,042 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 13:53:03,044 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 13:53:03,069 WARNING:kafka.cluster:Topic global_model is not available during auto-create initialization
+2025-12-28 13:53:03,070 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:53:03,072 WARNING:kafka.cluster:Topic client_events is not available during auto-create initialization
+2025-12-28 13:53:03,072 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 13:58:03,047 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:58:03,047 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:58:03,049 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:58:03,072 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:58:03,073 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:58:03,073 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:58:03,075 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 13:58:03,076 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 13:58:03,077 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 13:58:03,077 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 13:58:03,079 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 13:58:03,081 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 13:58:03,082 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 14:15:14,812 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 14:15:14,820 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 14:15:14,820 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 14:15:14,821 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 14:15:14,823 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 14:15:14,828 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 14:15:14,828 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 14:15:14,832 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 14:15:14,837 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 14:15:14,838 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 14:15:14,839 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 14:15:14,840 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 14:15:14,855 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 14:15:14,855 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 14:15:14,904 WARNING:kafka.cluster:Topic global_model is not available during auto-create initialization
+2025-12-28 14:15:14,905 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 14:20:14,844 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 14:20:14,845 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 14:20:14,847 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 14:20:14,859 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 14:20:14,860 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 14:20:14,860 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 14:20:14,862 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 14:20:14,870 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 14:20:14,907 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 14:20:14,908 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 14:20:14,908 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 14:20:14,910 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 14:20:14,911 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 16:01:24,347 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:01:24,354 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 16:01:24,356 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:01:24,357 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 16:01:24,358 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:01:24,363 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 16:01:24,363 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:01:24,367 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:01:24,371 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 16:01:24,372 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:01:24,373 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 16:01:24,374 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 16:01:24,384 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 16:01:24,384 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 16:01:24,423 WARNING:kafka.cluster:Topic global_model is not available during auto-create initialization
+2025-12-28 16:01:24,424 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 16:06:24,372 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:06:24,373 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:06:24,374 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 16:06:24,387 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:06:24,388 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:06:24,388 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 16:06:24,390 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 16:06:24,400 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 16:06:24,426 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:06:24,427 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:06:24,427 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 16:06:24,429 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 16:06:24,431 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 16:38:05,490 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:38:05,497 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 16:38:05,498 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:38:05,499 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 16:38:05,501 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:38:05,506 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 16:38:05,507 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:38:05,510 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:38:05,514 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 16:38:05,515 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:38:05,518 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 16:38:05,519 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 16:38:05,522 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 16:38:05,523 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 16:38:05,536 WARNING:kafka.cluster:Topic global_model is not available during auto-create initialization
+2025-12-28 16:38:05,537 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 16:43:16,362 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:43:16,362 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:43:16,363 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 16:43:16,393 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:43:16,394 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:43:16,394 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 16:43:16,396 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 16:43:16,398 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 16:43:16,405 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 16:43:16,406 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 16:43:16,406 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 16:43:16,407 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 16:43:16,409 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 17:46:22,889 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 17:46:22,895 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 17:46:22,895 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 17:46:22,896 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 17:46:22,898 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 17:46:22,902 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 17:46:22,903 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 17:46:22,906 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 17:46:22,911 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 17:46:22,911 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 17:46:22,912 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 17:46:22,913 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 17:46:22,921 ERROR:kafka.cluster:Topic global_model not found in cluster metadata
+2025-12-28 17:46:22,922 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 17:46:22,922 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 17:46:22,923 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 17:51:22,909 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 17:51:22,912 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 17:51:22,913 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 17:51:22,924 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 17:51:22,925 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 17:51:22,925 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 17:51:22,925 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 17:51:22,926 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 17:51:22,926 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 17:51:22,928 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 17:51:22,929 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 17:51:22,942 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 17:51:22,943 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 22:55:15,109 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 22:55:15,116 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 22:55:15,117 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 22:55:15,117 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 22:55:15,119 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 22:55:15,123 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 22:55:15,124 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 22:55:15,127 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 22:55:15,133 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 22:55:15,133 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 22:55:15,134 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 22:55:15,135 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 22:55:15,145 ERROR:kafka.cluster:Topic client_events not found in cluster metadata
+2025-12-28 22:55:15,146 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 22:55:15,188 WARNING:kafka.cluster:Topic global_model is not available during auto-create initialization
+2025-12-28 22:55:15,188 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 22:56:18,277 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 22:56:18,284 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 22:56:18,284 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 22:56:18,285 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 22:56:18,286 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 22:56:18,291 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 22:56:18,292 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 22:56:18,295 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 22:56:18,300 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 22:56:18,300 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 22:56:18,301 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 22:56:18,302 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 22:56:18,365 WARNING:kafka.cluster:Topic client_events is not available during auto-create initialization
+2025-12-28 22:56:18,365 WARNING:kafka.cluster:Topic global_model is not available during auto-create initialization
+2025-12-28 22:56:18,366 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 22:56:18,366 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 23:01:18,299 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:01:18,300 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:01:18,301 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 23:01:18,375 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:01:18,375 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:01:18,377 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:01:18,381 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:01:18,381 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 23:01:18,383 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 23:01:18,386 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 23:01:18,386 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 23:01:18,390 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-28 23:01:18,392 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 23:06:47,659 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:06:47,669 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 23:06:47,670 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:06:47,672 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-28 23:06:47,676 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:06:47,682 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 23:06:47,682 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:06:47,688 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:06:47,695 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-28 23:06:47,696 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:06:47,697 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-28 23:06:47,698 INFO:manager_agent:Client is waiting for global model...
+2025-12-28 23:06:47,713 ERROR:kafka.cluster:Topic global_model not found in cluster metadata
+2025-12-28 23:06:47,714 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 23:06:47,802 WARNING:kafka.cluster:Topic client_events is not available during auto-create initialization
+2025-12-28 23:06:47,802 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-28 23:11:47,795 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:11:47,795 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:11:47,796 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:11:47,797 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:11:47,797 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 23:11:47,797 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 23:11:47,800 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-28 23:11:47,811 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-28 23:11:47,854 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-28 23:11:47,855 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-28 23:11:47,855 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-28 23:11:47,857 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-28 23:11:47,858 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-29 00:48:11,089 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 00:48:11,106 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-29 00:48:11,107 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 00:48:11,110 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-29 00:48:11,116 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 00:48:11,129 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-29 00:48:11,131 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 00:48:11,140 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 00:48:11,152 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-29 00:48:11,154 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 00:48:11,156 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-29 00:48:11,159 INFO:manager_agent:Client is waiting for global model...
+2025-12-29 00:48:11,183 ERROR:kafka.cluster:Topic global_model not found in cluster metadata
+2025-12-29 00:48:11,184 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-29 00:48:11,314 WARNING:kafka.cluster:Topic client_events is not available during auto-create initialization
+2025-12-29 00:48:11,315 INFO:kafka.consumer.subscription_state:Updated partition assignment: []
+2025-12-29 00:53:11,190 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 00:53:11,192 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 00:53:11,193 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 00:53:11,259 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 00:53:11,260 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 00:53:11,260 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 00:53:11,264 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-29 00:53:11,281 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 0.
+2025-12-29 00:53:11,418 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 00:53:11,419 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 00:53:11,419 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 00:53:11,423 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-29 00:53:11,426 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 0.
+2025-12-29 01:26:28,988 INFO:manager_agent:Received global model from Kafka
+2025-12-29 01:26:29,034 INFO:manager_agent:Starting training for round 1
+2025-12-29 01:26:32,454 ERROR:manager_agent:Data validation failed: Only one label present
+2025-12-29 01:35:51,824 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 01:35:51,827 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-29 01:35:51,828 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 01:35:51,829 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('global_model',)
+2025-12-29 01:35:51,832 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 01:35:51,835 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-29 01:35:51,836 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 01:35:51,840 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 01:35:51,844 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <checking_api_versions_recv> [IPv4 ('172.19.0.7', 9092)]>: Broker version identified as 2.6
+2025-12-29 01:35:51,845 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 01:35:51,846 INFO:kafka.consumer.subscription_state:Updating subscribed topics to: ('client_events',)
+2025-12-29 01:35:51,847 INFO:manager_agent:Client is waiting for global model...
+2025-12-29 01:35:51,849 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='client_events', partition=0)]
+2025-12-29 01:35:51,851 INFO:kafka.consumer.subscription_state:Updated partition assignment: [TopicPartition(topic='global_model', partition=0)]
+2025-12-29 01:35:51,853 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 01:35:51,854 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 01:35:51,855 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 01:35:51,856 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 01:35:51,856 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 01:35:51,857 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-2.3.0, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 01:35:51,874 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='client_events', partition=0) to offset 2.
+2025-12-29 01:35:51,874 INFO:kafka.consumer.fetcher:Resetting offset for partition TopicPartition(topic='global_model', partition=0) to offset 3.
+2025-12-29 01:40:51,852 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 01:40:51,855 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 01:40:51,855 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 13:16:25,878 INFO:kafka.client:Closing idle connection 1, last active 41734020 ms ago
+2025-12-29 13:16:25,878 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 13:16:25,880 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 13:16:25,881 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.

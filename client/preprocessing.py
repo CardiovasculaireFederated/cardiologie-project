@@ -3,6 +3,9 @@
 # Transformation Spark ML: Nettoyage → Encodage → Vectorisation → Normalisation
 
 import os
+from pathlib import Path
+
+import pandas as pd
 
 from pyspark.sql.types import StructType, StructField, IntegerType, DoubleType, StringType
 from pyspark.sql.functions import col, when, isnan, isnull, mean, lit
@@ -413,3 +416,39 @@ def select_top_features(df, n_features=13):
     # Utiliser ChiSqSelector ou PCA de Spark ML
 
     return df
+
+
+def preprocess_csv_to_flat_file(input_path, output_path):
+    """
+    Run the Spark preprocessing pipeline on a raw CSV and save a flat CSV.
+
+    Output columns are f0..f{n-1} plus optional "label".
+    """
+    from pyspark.sql import SparkSession
+
+    input_path = str(input_path)
+    output_path = Path(output_path)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+
+    spark = SparkSession.builder.appName("cardio-preprocess").getOrCreate()
+    schema = get_heart_schema()
+    df_raw = spark.read.csv(input_path, header=True, schema=schema)
+
+    df_processed, _ = preprocess_data(df_raw, pipeline_model=None)
+
+    pdf = df_processed.toPandas()
+    if "features" not in pdf.columns:
+        spark.stop()
+        raise ValueError("Expected 'features' column in Spark output.")
+
+    features_df = pd.DataFrame(
+        pdf["features"].apply(lambda v: v.toArray()).tolist()
+    )
+    features_df.columns = [f"f{i}" for i in range(features_df.shape[1])]
+    if "label" in pdf.columns:
+        features_df["label"] = pdf["label"].astype(float)
+
+    features_df.to_csv(output_path, index=False)
+    spark.stop()
+
+    return str(output_path)

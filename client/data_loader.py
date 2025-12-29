@@ -143,3 +143,58 @@ def load_data(file_path, test_size=0.2, val_size=0.1, batch_size=32, random_stat
     print(f"{'='*50}\n")
     
     return train_loader, val_loader, test_loader
+
+
+def load_processed_data(
+    file_path, test_size=0.2, val_size=0.1, batch_size=32, random_state=42
+):
+    """
+    Load already preprocessed (numeric) data with columns f0..fN and label.
+    """
+    df = pd.read_csv(file_path)
+
+    if "label" not in df.columns:
+        raise ValueError("Processed dataset must contain a 'label' column.")
+
+    feature_cols = [c for c in df.columns if c != "label"]
+    if not feature_cols:
+        raise ValueError("Processed dataset has no feature columns.")
+
+    X = df[feature_cols].values.astype(np.float32)
+    y = df["label"].values
+    if y.dtype == object:
+        y = LabelEncoder().fit_transform(y)
+    y = y.astype(np.float32)
+
+    X = np.where(np.isinf(X), np.nan, X)
+    col_medians = np.nanmedian(X, axis=0)
+    inds = np.where(np.isnan(X))
+    X[inds] = np.take(col_medians, inds[1])
+
+    X_temp, X_test, y_temp, y_test = train_test_split(
+        X, y, test_size=test_size, random_state=random_state, stratify=y
+    )
+
+    val_ratio = val_size / (1 - test_size)
+    X_train, X_val, y_train, y_val = train_test_split(
+        X_temp, y_temp, test_size=val_ratio, random_state=random_state, stratify=y_temp
+    )
+
+    X_train_tensor = torch.FloatTensor(X_train)
+    y_train_tensor = torch.FloatTensor(y_train)
+
+    X_val_tensor = torch.FloatTensor(X_val)
+    y_val_tensor = torch.FloatTensor(y_val)
+
+    X_test_tensor = torch.FloatTensor(X_test)
+    y_test_tensor = torch.FloatTensor(y_test)
+
+    train_dataset = TensorDataset(X_train_tensor, y_train_tensor)
+    val_dataset = TensorDataset(X_val_tensor, y_val_tensor)
+    test_dataset = TensorDataset(X_test_tensor, y_test_tensor)
+
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+
+    return train_loader, val_loader, test_loader
