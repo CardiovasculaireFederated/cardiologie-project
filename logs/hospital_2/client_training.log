@@ -625,3 +625,7 @@ kafka.errors.CommitFailedError: CommitFailedError: Offset commit cannot be compl
 2025-12-29 13:16:25,878 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
 2025-12-29 13:16:25,880 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
 2025-12-29 13:16:25,881 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 13:25:52,571 INFO:kafka.client:Closing idle connection 1, last active 566689 ms ago
+2025-12-29 13:25:52,572 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 13:25:52,575 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 13:25:52,576 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.

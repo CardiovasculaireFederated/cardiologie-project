@@ -627,3 +627,30 @@ kafka.errors.CommitFailedError: CommitFailedError: Offset commit cannot be compl
 2025-12-29 13:16:25,915 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
 2025-12-29 13:16:25,917 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
 2025-12-29 13:16:25,918 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 13:25:52,633 INFO:kafka.client:Closing idle connection 1, last active 566713 ms ago
+2025-12-29 13:25:52,635 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Closing connection. 
+2025-12-29 13:25:52,637 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connecting> [IPv4 ('172.19.0.7', 9092)]>: connecting to kafka:9092 [('172.19.0.7', 9092) IPv4]
+2025-12-29 13:25:52,638 INFO:kafka.conn:<BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=kafka:9092 <connected> [IPv4 ('172.19.0.7', 9092)]>: Connection complete.
+2025-12-29 14:08:52,751 INFO:manager_agent:Received global model from Kafka
+2025-12-29 14:08:52,760 INFO:manager_agent:Starting training for round 1
+2025-12-29 14:08:59,972 INFO:scout_agent:ScoutAgent: lr=0.0001 -> val_acc=0.8400
+2025-12-29 14:09:00,134 INFO:scout_agent:ScoutAgent: lr=0.0003 -> val_acc=0.8400
+2025-12-29 14:09:00,158 INFO:scout_agent:ScoutAgent: lr=0.001 -> val_acc=0.8400
+2025-12-29 14:09:00,178 INFO:scout_agent:ScoutAgent: lr=0.003 -> val_acc=0.8400
+2025-12-29 14:09:00,197 INFO:scout_agent:ScoutAgent: lr=0.01 -> val_acc=0.8400
+2025-12-29 14:09:00,198 INFO:manager_agent:Using hyperparameters: epochs=5, lr=0.0001
+2025-12-29 14:09:00,661 INFO:client.trainer:Epoch 1/5 | TrainLoss=0.5437 Acc=0.7887 | ValLoss=0.5248 Acc=0.8000
+2025-12-29 14:09:01,134 INFO:client.trainer:Epoch 2/5 | TrainLoss=0.5329 Acc=0.7921 | ValLoss=0.5214 Acc=0.8000
+2025-12-29 14:09:01,134 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5248 → 0.5214)
+2025-12-29 14:09:01,726 INFO:client.trainer:Epoch 3/5 | TrainLoss=0.5289 Acc=0.7934 | ValLoss=0.5178 Acc=0.8000
+2025-12-29 14:09:01,726 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5214 → 0.5178)
+2025-12-29 14:09:01,909 INFO:client.trainer:Epoch 4/5 | TrainLoss=0.5249 Acc=0.7960 | ValLoss=0.5164 Acc=0.8000
+2025-12-29 14:09:01,909 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5178 → 0.5164)
+2025-12-29 14:09:02,357 INFO:client.trainer:Epoch 5/5 | TrainLoss=0.5269 Acc=0.7946 | ValLoss=0.5150 Acc=0.8000
+2025-12-29 14:09:02,357 INFO:sentinel_agent:Sentinel: improvement detected (loss 0.5164 → 0.5150)
+2025-12-29 14:09:02,397 INFO:model_evaluator:ModelEvaluator: accuracy=0.8000 xai_score=0.0009
+2025-12-29 14:09:02,415 INFO:manager_agent:Round 1 sent to Kafka by client_1
+2025-12-29 14:09:02,512 INFO:manager_agent:Server decision: {'client_id': 'client_1', 'accepted': True, 'candidate_accuracy': 0.7913125590179415, 'current_accuracy': 0.7913125590179415, 'base_version': 0, 'new_version': 1, 'reason': 'all_updates'}
+2025-12-29 14:09:06,425 INFO:manager_agent:Received global model from Kafka
+2025-12-29 14:09:06,426 INFO:manager_agent:Starting training for round 2
+2025-12-29 14:09:06,450 ERROR:manager_agent:Data validation failed: Only one label present
