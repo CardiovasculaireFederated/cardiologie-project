@@ -18,7 +18,7 @@ cur = conn.cursor()
 
 # 2. Préparation des données de test
 model_name = "Cardio_Model_Alpha_V1"
-accuracy = 0.85 # 89.5% de précision
+accuracy = 0.90 # 89.5% de précision
 
 # Simulation de poids PyTorch (dictionnaire de tenseurs)
 fake_weights = {

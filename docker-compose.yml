@@ -101,6 +101,8 @@ services:
     build:
       context: .
       dockerfile: client/Dockerfile
+    ports:
+      - "8501:8501"
     container_name: fl_client_1
     environment:
       CLIENT_ID: "client_1"
@@ -119,6 +121,8 @@ services:
     build:
       context: .
       dockerfile: client/Dockerfile
+    ports:
+      - "8502:8501"
     container_name: fl_client_2
     environment:
       CLIENT_ID: "client_2"

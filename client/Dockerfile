@@ -4,11 +4,12 @@ WORKDIR /app
 
 COPY client/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-
+RUN pip install --no-cache-dir streamlit
 COPY client /app/client
 
 COPY common /app/common
 
 ENV PYTHONPATH=/app
+EXPOSE 8501
 
-CMD ["python", "-m", "client.main"]
+CMD ["streamlit", "run", "client/streamlit_ui.py", "--server.port=8501", "--server.address=0.0.0.0"]
