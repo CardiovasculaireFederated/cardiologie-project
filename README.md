@@ -35,6 +35,7 @@ Le système repose sur une architecture moderne combinant :
 
 ## 📁 Structure du Projet
 
+<pre>
 Cardio_Federated_Project/
 │
 ├── client/ # Client hospitalier
@@ -154,6 +155,46 @@ cardiologie-project/
 
 ```bash
 docker-compose up -d
+</pre>
+---
+
+## 🚀 Démarrage Rapide
+
+1. **Prérequis** :
+   - Docker & Docker Compose
+   - Python 3.10+
+
+2. **Installation enveronement** :
+   ```bash
+   git clone https://github.com/your-repo/Cardio_Federated_Project.git
+   cd Cardio_Federated_Project
+   conda create -n cardio-env python=3.10
+   conda activate cardio-env
+   pip install -r requirements-dev.txt
+   ```
+
+3. **Installation java openJDK** :
+
+   ```bash
+   sudo apt install openjdk-11-jdk -y
+
+   java -version
+
+   echo 'export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64' >> ~/.bashrc
+   echo 'export PATH=$JAVA_HOME/bin:$PATH' >> ~/.bashrc
+   source ~/.bashrc
+
+   echo $JAVA_HOME
+   ```
+
+4. **Des outils suplementaires** :
+```bash
+sudo apt install tree htop curl -y
+```
+
+5. **Lancement** :
+```bash
+docker-compose up --build
 ```
 
 
@@ -170,6 +211,9 @@ Ouvre ton navigateur à l’adresse :
 
 - **Email :** admin.com  
 - **Mot de passe :** admin 
+## 📚 Documentation
+
+- [Documentation](https://github.com/your-repo/Cardio_Federated_Project/blob/main/README.md)
 
 ### ➕ Ajouter le serveur PostgreSQL
 
@@ -200,6 +244,10 @@ python generate_tables.py
 - [Documentation](https://github.com/your-repo/Cardio_Federated_Project/blob/main/README.md)
 
 ---
+
+
+
+
 
 
 
