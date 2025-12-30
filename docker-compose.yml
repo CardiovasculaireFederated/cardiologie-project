@@ -142,6 +142,7 @@ services:
       CLIENT_LOG_PATH: "logs/client_training.log"
       CLIENT_METRICS_PORT: "9101"
       CLIENT_MIN_SAMPLES: "10"
+      CLIENT_ALLOW_SINGLE_LABEL: "0"
     depends_on:
       kafka:
         condition: service_healthy
@@ -196,6 +197,7 @@ services:
       CLIENT_LOG_PATH: "logs/client_training.log"
       CLIENT_METRICS_PORT: "9102"
       CLIENT_MIN_SAMPLES: "10"
+      CLIENT_ALLOW_SINGLE_LABEL: "0"
     depends_on:
       kafka:
         condition: service_healthy
@@ -224,8 +226,10 @@ services:
       POSTGRES_PASSWORD: "cardio111"
       TRAINING_POLL_INTERVAL_SEC: "5"
       AGGREGATION_WAIT_SEC: "30"
-      MODEL_ACCEPT_DELTA: "0.00"
+      MODEL_ACCEPT_DELTA: "0.001"
       KAFKA_SERVER_METRICS_PORT: "9200"
+      FORCE_FRESH_MODEL: "1"
+      EVAL_METRIC: "accuracy"
     depends_on:
       kafka:
         condition: service_healthy

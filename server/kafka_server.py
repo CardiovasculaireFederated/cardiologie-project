@@ -45,6 +45,11 @@ TEST_DATASET_NAME = os.getenv("TEST_DATASET_NAME", "global_test_set")
 TEST_DATASET_PATH = os.getenv(
     "TEST_PATH", str(BASE_DIR / "server/data_test/test.csv")
 )
+FORCE_FRESH_MODEL = os.getenv("FORCE_FRESH_MODEL", "0").lower() in (
+    "1",
+    "true",
+    "yes",
+)
 
 POLL_INTERVAL_SEC = float(os.getenv("TRAINING_POLL_INTERVAL_SEC", "10"))
 AGGREGATION_WAIT_SEC = float(os.getenv("AGGREGATION_WAIT_SEC", "15"))
@@ -53,6 +58,9 @@ MODEL_ACCEPT_DELTA = float(os.getenv("MODEL_ACCEPT_DELTA", "0.005"))
 
 def init_global_model() -> Dict[str, torch.Tensor]:
     logger.info("Loading global model (PyTorch)...")
+    if FORCE_FRESH_MODEL:
+        logger.info("Force fresh model enabled. Ignoring DB/file.")
+        return HeartDiseaseModel().state_dict()
     weights_bytes, _ = get_best_model_weights()
 
     if weights_bytes is None:
@@ -190,12 +198,16 @@ def main() -> None:
         logger.error(f"Model init error: {e}")
         return
 
-    try:
-        current_accuracy = evaluate_global_model(current_state)
-        logger.info(f"Initial global accuracy: {current_accuracy:.4f}")
-    except Exception as exc:
-        logger.warning(f"Global evaluation failed: {exc}")
+    if FORCE_FRESH_MODEL:
         current_accuracy = 0.0
+        logger.info("Initial global accuracy forced to 0.0 (fresh model).")
+    else:
+        try:
+            current_accuracy = evaluate_global_model(current_state)
+            logger.info(f"Initial global accuracy: {current_accuracy:.4f}")
+        except Exception as exc:
+            logger.warning(f"Global evaluation failed: {exc}")
+            current_accuracy = 0.0
 
     current_version = 0
     metrics["global_accuracy"].set(current_accuracy)
@@ -204,6 +216,7 @@ def main() -> None:
     inflight_version: Optional[int] = None
     expected_clients: Set[str] = set()
     received_updates: List[Dict[str, Any]] = []
+    skipped_clients: Set[str] = set()
     first_update_ts: Optional[float] = None
     pending_requests: Dict[str, Dict[str, Any]] = {}
 
@@ -241,6 +254,7 @@ def main() -> None:
             inflight_version = None
             expected_clients = set()
             received_updates = []
+            skipped_clients.clear()
             first_update_ts = None
 
         if not updates_snapshot or version_snapshot is None:
@@ -330,7 +344,7 @@ def main() -> None:
 
     def schedule_dispatch_loop() -> None:
         nonlocal inflight_version, expected_clients
-        nonlocal received_updates, first_update_ts
+        nonlocal received_updates, first_update_ts, skipped_clients
 
         while True:
             time.sleep(POLL_INTERVAL_SEC)
@@ -353,6 +367,7 @@ def main() -> None:
                         inflight_version = current_version
                         expected_clients = set(targets)
                         received_updates = []
+                        skipped_clients = set()
                         first_update_ts = None
                         metrics["inflight_clients"].set(len(expected_clients))
                         metrics["received_updates"].set(0)
@@ -373,10 +388,44 @@ def main() -> None:
                 continue
 
             if metadata.get("skip_training"):
+                client_id = metadata.get("client_id")
+                base_version_raw = metadata.get(
+                    "base_model_version", metadata.get("round_id")
+                )
+                try:
+                    base_version = int(base_version_raw)
+                except (TypeError, ValueError):
+                    base_version = None
+
                 logger.info(
-                    f"Client {metadata.get('client_id')} skipped training "
+                    f"Client {client_id} skipped training "
                     f"({metadata.get('skip_reason')})."
                 )
+                if (
+                    client_id is None
+                    or base_version is None
+                    or inflight_version is None
+                    or base_version != inflight_version
+                ):
+                    continue
+                with state_lock:
+                    if client_id not in expected_clients:
+                        continue
+                    if client_id in skipped_clients:
+                        continue
+                    skipped_clients.add(client_id)
+                    metrics["received_updates"].set(
+                        len(received_updates) + len(skipped_clients)
+                    )
+                    if first_update_ts is None:
+                        first_update_ts = time.time()
+                    all_received = (
+                        len(received_updates) + len(skipped_clients)
+                        >= len(expected_clients)
+                    )
+
+                if all_received:
+                    finalize_inflight("all_updates")
                 continue
 
             client_id = metadata.get("client_id")

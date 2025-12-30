@@ -121,6 +121,41 @@ h1, h2, h3 {
   color: var(--accent-2);
 }
 
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+.step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #c8c1b7;
+}
+
+.step-dot.done {
+  background: var(--accent);
+}
+
+.step-dot.failed {
+  background: var(--accent-2);
+}
+
+.step-dot.waiting {
+  background: #f2c88b;
+}
+
+.step-label {
+  font-weight: 600;
+}
+
+.step-meta {
+  color: var(--ink-soft);
+  font-size: 12px;
+}
+
 div.stButton > button {
   background: var(--accent);
   color: white;
@@ -156,11 +191,122 @@ def get_producer() -> KafkaProducer:
     )
 
 
+def log_ui_event(message: str) -> None:
+    if not LOG_PATH:
+        return
+    log_dir = os.path.dirname(LOG_PATH)
+    if log_dir:
+        os.makedirs(log_dir, exist_ok=True)
+    timestamp = time.strftime("%Y-%m-%d %H:%M:%S")
+    with open(LOG_PATH, "a") as handle:
+        handle.write(f"{timestamp} INFO:streamlit_ui:{message}\n")
+
+
 def extract_last_server_decision(lines: List[str]) -> str:
     for line in reversed(lines):
         if "Server decision:" in line:
             return line.strip()
     return "No server decision yet."
+
+
+def _find_last_line(lines: List[str], token: str) -> Optional[str]:
+    for line in reversed(lines):
+        if token in line:
+            return line.strip()
+    return None
+
+
+def _parse_decision_status(line: Optional[str]) -> Tuple[str, str]:
+    if not line:
+        return "pending", "Waiting for server decision."
+    if "accepted': True" in line or "accepted\": true" in line:
+        return "done", "Accepted by server."
+    if "accepted': False" in line or "accepted\": false" in line:
+        return "failed", "Rejected by server."
+    return "waiting", "Decision received."
+
+
+def build_progress_steps(
+    logs: List[str],
+    upload_state: str,
+    pre_state: str,
+) -> List[Tuple[str, str, str]]:
+    steps = []
+
+    steps.append(
+        (
+            "Upload data",
+            "done" if upload_state == "ready" else "pending",
+            "CSV uploaded." if upload_state == "ready" else "Waiting for upload.",
+        )
+    )
+    steps.append(
+        (
+            "Preprocess data",
+            "done" if pre_state == "done" else "pending",
+            "Processed file ready." if pre_state == "done" else "Waiting for preprocess.",
+        )
+    )
+
+    request_line = _find_last_line(logs, "Training request sent.")
+    steps.append(
+        (
+            "Training request",
+            "done" if request_line else "pending",
+            "Sent to server." if request_line else "Not sent yet.",
+        )
+    )
+
+    received_line = _find_last_line(logs, "Received global model from Kafka")
+    steps.append(
+        (
+            "Global model received",
+            "done" if received_line else "pending",
+            "Model dispatched by server." if received_line else "Waiting for dispatch.",
+        )
+    )
+
+    validation_line = _find_last_line(logs, "Data validation failed")
+    if validation_line:
+        steps.append(
+            (
+                "Data validation",
+                "failed",
+                validation_line.split("Data validation failed:", 1)[-1].strip(),
+            )
+        )
+    else:
+        steps.append(
+            (
+                "Data validation",
+                "done" if received_line else "pending",
+                "Validation passed." if received_line else "Not started.",
+            )
+        )
+
+    training_line = _find_last_line(logs, "Starting training for round")
+    steps.append(
+        (
+            "Local training",
+            "done" if training_line else "pending",
+            training_line if training_line else "Waiting for training.",
+        )
+    )
+
+    sent_line = _find_last_line(logs, "sent to Kafka")
+    steps.append(
+        (
+            "Update sent",
+            "done" if sent_line else "pending",
+            sent_line if sent_line else "No update sent yet.",
+        )
+    )
+
+    decision_line = _find_last_line(logs, "Server decision:")
+    decision_status, decision_hint = _parse_decision_status(decision_line)
+    steps.append(("Server decision", decision_status, decision_hint))
+
+    return steps
 
 
 def extract_training_state(lines: List[str]) -> Tuple[str, Optional[int]]:
@@ -207,6 +353,7 @@ with left:
         os.makedirs(os.path.dirname(RAW_DATA_PATH), exist_ok=True)
         df.to_csv(RAW_DATA_PATH, index=False)
         st.success(f"{len(df)} rows uploaded.")
+        log_ui_event(f"Upload complete ({len(df)} rows).")
         st.dataframe(df.head())
     st.markdown("</div>", unsafe_allow_html=True)
 
@@ -224,6 +371,7 @@ with right:
                     RAW_DATA_PATH, PROCESSED_DATA_PATH
                 )
                 st.success(f"Preprocessing complete: {processed_path}")
+                log_ui_event(f"Preprocess complete: {processed_path}.")
 
                 producer = get_producer()
                 payload = {
@@ -236,6 +384,7 @@ with right:
                 producer.flush()
                 st.session_state.last_request_ts = time.time()
                 st.success("Training request sent.")
+                log_ui_event("Training request sent.")
             except Exception as exc:
                 st.error(f"Preprocessing/training failed: {exc}")
         else:
@@ -281,6 +430,27 @@ st.markdown(
 """,
     unsafe_allow_html=True,
 )
+st.markdown("</div>", unsafe_allow_html=True)
+
+st.markdown('<div class="panel">', unsafe_allow_html=True)
+st.subheader("Pipeline progress")
+steps = build_progress_steps(logs, upload_state, pre_state)
+for title, status, detail in steps:
+    dot_class = "step-dot"
+    if status in ("done", "failed", "waiting"):
+        dot_class = f"{dot_class} {status}"
+    st.markdown(
+        f"""
+<div class="step">
+  <span class="{dot_class}"></span>
+  <div>
+    <div class="step-label">{title}</div>
+    <div class="step-meta">{detail}</div>
+  </div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown('<div class="panel">', unsafe_allow_html=True)

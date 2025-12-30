@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 from pyspark.sql.types import StructType, StructField, IntegerType, DoubleType, StringType
-from pyspark.sql.functions import col, when, isnan, isnull, mean, lit
+from pyspark.sql.functions import col, when, isnan, isnull, mean, lit, lower, trim
 from pyspark.ml.feature import (
     VectorAssembler,
     StandardScaler,
@@ -138,6 +138,22 @@ def clean_missing_values(df):
 
     print("✓ Valeurs manquantes traitées")
     return df
+
+
+def encode_target_label(df, target_col):
+    """
+    Encode common target values into a binary label column.
+    """
+    target_str = lower(trim(col(target_col).cast("string")))
+    positive_values = ["yes", "y", "true", "1", "1.0", "positive", "pos"]
+    negative_values = ["no", "n", "false", "0", "0.0", "negative", "neg"]
+
+    return df.withColumn(
+        "label",
+        when(target_str.isin(positive_values), 1.0)
+        .when(target_str.isin(negative_values), 0.0)
+        .otherwise(0.0),
+    )
 
 
 def build_preprocessing_pipeline(feature_engineering_mode=None, target_dim=None):
@@ -290,14 +306,8 @@ def preprocess_data(df, pipeline_model=None):
     target_col = get_target_column()
 
     if target_col in df_clean.columns:
-        # Encoder Yes/No en 1/0
-        df_clean = df_clean.withColumn(
-            "label",
-            when(col(target_col) == "Yes", 1.0)
-            .when(col(target_col) == "No", 0.0)
-            .otherwise(0.0)
-        )
-        print(f"✓ Target '{target_col}' encodée en 'label' (Yes=1, No=0)")
+        df_clean = encode_target_label(df_clean, target_col)
+        print(f"✓ Target '{target_col}' encodée en 'label'")
 
     # ========================================
     # ÉTAPE 3: Appliquer le pipeline
@@ -358,12 +368,7 @@ def preprocess_streaming_batch(df, pipeline_model):
     # Encoder la target
     target_col = get_target_column()
     if target_col in df_clean.columns:
-        df_clean = df_clean.withColumn(
-            "label",
-            when(col(target_col) == "Yes", 1.0)
-            .when(col(target_col) == "No", 0.0)
-            .otherwise(0.0)
-        )
+        df_clean = encode_target_label(df_clean, target_col)
 
     # Transformer avec le pipeline pré-entraîné
     df_transformed = pipeline_model.transform(df_clean)

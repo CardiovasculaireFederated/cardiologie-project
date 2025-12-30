@@ -46,7 +46,15 @@ class ManagerAgent:
 
         self.model = HeartDiseaseModel()
         min_samples = int(os.getenv("CLIENT_MIN_SAMPLES", "100"))
-        self.validator = DataValidatorAgent(min_samples=min_samples)
+        allow_single_label = os.getenv("CLIENT_ALLOW_SINGLE_LABEL", "0").lower() in (
+            "1",
+            "true",
+            "yes",
+        )
+        self.validator = DataValidatorAgent(
+            min_samples=min_samples,
+            allow_single_label=allow_single_label,
+        )
         self.scout = ScoutAgent(base_epochs=self.base_epochs)
         self.evaluator = ModelEvaluatorAgent()
         self.train_loader = None
@@ -268,6 +276,7 @@ class ManagerAgent:
         metadata = {
             "client_id": self.client_id,
             "round_id": self.round_id,
+            "base_model_version": self.current_global_version,
             "data_validation": validation_report,
             "skip_training": True,
             "skip_reason": reason,

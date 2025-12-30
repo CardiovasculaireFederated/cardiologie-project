@@ -1,4 +1,5 @@
 import io
+import logging
 import os
 from pathlib import Path
 from typing import Dict, Tuple
@@ -16,6 +17,8 @@ from .data_base import get_dataset
 BASE_DIR = Path(__file__).resolve().parent.parent  # cardiologie-project/
 load_dotenv(BASE_DIR / ".env")
 
+logger = logging.getLogger("evaluation")
+
 DEFAULT_TEST_PATH = "server/data_test/test.csv"
 TEST_CSV_PATH = os.getenv("TEST_PATH", DEFAULT_TEST_PATH)
 PREPROCESSED_TEST_PATH = os.getenv(
@@ -25,6 +28,7 @@ TEST_DATASET_NAME = os.getenv("TEST_DATASET_NAME", "global_test_set")
 EVAL_TARGET_COLUMN = os.getenv("EVAL_TARGET_COLUMN", "label")
 FALLBACK_TARGET_COLUMN = os.getenv("FALLBACK_TARGET_COLUMN", "Heart Disease Status")
 TARGET_DIM = int(os.getenv("TARGET_FEATURE_DIM", "13"))
+EVAL_METRIC = os.getenv("EVAL_METRIC", "f1").lower()
 
 
 def _split_features_target(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
@@ -79,12 +83,15 @@ def _preprocess_df(df: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
 def _load_test_dataframe() -> pd.DataFrame:
     dataset_bytes = get_dataset(TEST_DATASET_NAME)
     if dataset_bytes:
+        logger.info("Using global test dataset from database.")
         return pd.read_csv(io.BytesIO(bytes(dataset_bytes)))
 
     if os.path.exists(PREPROCESSED_TEST_PATH):
+        logger.info("Using preprocessed test dataset from file.")
         return pd.read_csv(PREPROCESSED_TEST_PATH)
 
     if os.path.exists(TEST_CSV_PATH):
+        logger.info("Using raw test dataset from file.")
         return pd.read_csv(TEST_CSV_PATH)
 
     raise FileNotFoundError("Global test dataset not found.")
@@ -98,6 +105,9 @@ def evaluate_global_model(aggregated_weights: Dict) -> float:
 
     df = _load_test_dataframe()
     X, y = _preprocess_df(df)
+    unique, counts = np.unique(y, return_counts=True)
+    label_counts = {int(k): int(v) for k, v in zip(unique, counts)}
+    logger.info(f"Global test label distribution: {label_counts}")
 
     X_tensor = torch.tensor(X, dtype=torch.float32)
     y_tensor = torch.tensor(y, dtype=torch.float32)
@@ -105,13 +115,44 @@ def evaluate_global_model(aggregated_weights: Dict) -> float:
     dataset = TensorDataset(X_tensor, y_tensor)
     loader = DataLoader(dataset, batch_size=32, shuffle=False)
 
-    correct, total = 0, 0
+    tp = tn = fp = fn = 0
 
     with torch.no_grad():
         for X_batch, y_batch in loader:
             logits = model(X_batch)
-            preds = torch.sigmoid(logits).round()
-            correct += (preds.squeeze() == y_batch).sum().item()
-            total += y_batch.size(0)
+            preds = (torch.sigmoid(logits) >= 0.5).to(torch.int64).squeeze()
+            y_true = (y_batch >= 0.5).to(torch.int64)
 
-    return correct / max(total, 1)
+            tp += ((preds == 1) & (y_true == 1)).sum().item()
+            tn += ((preds == 0) & (y_true == 0)).sum().item()
+            fp += ((preds == 1) & (y_true == 0)).sum().item()
+            fn += ((preds == 0) & (y_true == 1)).sum().item()
+
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    f1 = (2 * precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+    total = tp + tn + fp + fn
+    accuracy = (tp + tn) / total if total > 0 else 0.0
+    tpr = recall
+    tnr = tn / (tn + fp) if (tn + fp) > 0 else 0.0
+    balanced_acc = (tpr + tnr) / 2.0
+
+    logger.info(
+        "Global test metrics: precision=%.4f recall=%.4f f1=%.4f acc=%.4f bal_acc=%.4f (metric=%s)",
+        precision,
+        recall,
+        f1,
+        accuracy,
+        balanced_acc,
+        EVAL_METRIC,
+    )
+
+    if EVAL_METRIC in ("precision", "prec"):
+        return precision
+    if EVAL_METRIC in ("recall", "rec"):
+        return recall
+    if EVAL_METRIC in ("f1", "f1_score"):
+        return f1
+    if EVAL_METRIC in ("acc", "accuracy"):
+        return accuracy
+    return balanced_acc

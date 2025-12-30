@@ -16,10 +16,12 @@ class DataValidatorAgent:
         min_samples: int = 100,
         expected_features: int = 13,
         max_nan_ratio: float = 0.05,
+        allow_single_label: bool = False,
     ):
         self.min_samples = min_samples
         self.expected_features = expected_features
         self.max_nan_ratio = max_nan_ratio
+        self.allow_single_label = allow_single_label
 
     def validate(self, train_loader):
         dataset = train_loader.dataset
@@ -39,9 +41,17 @@ class DataValidatorAgent:
             )
 
         #  Labels sanity
-        unique_labels = torch.unique(y)
+        unique_labels, label_counts = torch.unique(y, return_counts=True)
         if unique_labels.numel() < 2:
-            return False, "Only one label present"
+            label_value = unique_labels[0].item() if unique_labels.numel() else None
+            label_count = label_counts[0].item() if label_counts.numel() else 0
+            message = (
+                f"Only one label present (label={label_value}, count={label_count})"
+            )
+            if self.allow_single_label:
+                logger.warning(message)
+            else:
+                return False, message
 
         #  NaN / Inf ratio
         nan_ratio = torch.isnan(X).float().mean().item()
