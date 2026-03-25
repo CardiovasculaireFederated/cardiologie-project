@@ -1,10 +1,10 @@
-# 🫀 Cardiologie Federated Learning Platform
+#  Cardiologie Federated Learning Platform
 ### Système Distribué et Scalable pour la Prédiction des Maladies Cardiovasculaires  
 *(Apache Spark • Apache Kafka • Federated Learning • Docker • Grafana)*
 
 ---
 
-## 📌 Présentation Générale
+##  Présentation Générale
 
 Ce projet a pour objectif de concevoir une **plateforme distribuée de prédiction des maladies cardiovasculaires**, respectant les contraintes strictes de **confidentialité des données médicales**, tout en étant **scalable**, **tolérante aux pannes** et **prête pour un déploiement réel en milieu hospitalier**.
 
@@ -17,7 +17,7 @@ Le système repose sur une architecture moderne combinant :
 
 ---
 
-## 🎯 Objectifs du Projet
+##  Objectifs du Projet
 
 - Permettre à plusieurs hôpitaux d’entraîner un modèle commun **sans jamais partager leurs données brutes**
 - Traiter des **volumes importants de données médicales** en temps réel
@@ -26,14 +26,14 @@ Le système repose sur une architecture moderne combinant :
 
 ---
 
-## 🧠 Architecture Conceptuelle
+##  Architecture Conceptuelle
 
 ![Project Flow](asset/flow.png)
 
 
 ---
 
-## 📁 Structure du Projet
+##  Structure du Projet
 <pre>
 Cardio_Federated_Project/
 │
@@ -106,12 +106,6 @@ sudo apt install tree htop curl -y
 ```bash
 docker-compose up --build
 ```
-
----
-
-## 📚 Documentation
-
-- [Documentation](https://github.com/your-repo/Cardio_Federated_Project/blob/main/README.md)
 
 ---
 
